@@ -1,0 +1,24 @@
+{
+  "projectType": "website",
+  "projectName": "",
+  "url": "http://localhost:3000",
+  "subtitle": "🏗",
+  "description": "",
+  "twitterHandle": "@",
+  "locale": "en-US",
+  "images": [
+    {
+      "url": "assets/images/default_logo.png",
+      "width": 792,
+      "height": 792,
+      "alt": "Image by macrovector on Freepik",
+      "type": "image/png"
+    }
+  ],
+  "additionalLinkTags": [
+    {
+      "rel": "icon",
+      "href": "/assets/images/default_logo.png"
+    }
+  ]
+}
