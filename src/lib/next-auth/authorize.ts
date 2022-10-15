@@ -18,11 +18,11 @@ export async function authorize(
 
   try {
     const user = await prisma.user.findFirstOrThrow({ where: { email } });
-    // if (user && user.email === email && typeof user.password !== 'string') {
-      // const result = await comparePasswords(password, user.password)
-      // const _user = omit(user, password)
+    if (user && user.email === email && typeof user.password !== 'string') {
+      // const result = await comparePasswords(password, user.password);
+      // const _user = omit(user, password);
       // return result && _user ? _user : null;
-    // }
+    }
   } catch (error) {
     console.log('Authorization Error', error);
   }
