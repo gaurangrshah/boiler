@@ -15,6 +15,7 @@ export const trpc = createTRPCNext<AppRouter>({
           queries: {
             staleTime: 5 * ONE_SECOND,
             retry: (failureCount, error: any) => {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
               const trcpErrorCode = error?.data?.code;
               if (trcpErrorCode === 'NOT_FOUND') {
                 return false;
