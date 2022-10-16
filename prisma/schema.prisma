@@ -64,6 +64,7 @@ model VerificationToken {
 
 model Preference {
     id          String        @id @default(cuid())
+    theme       String        @default("default")
     user        User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      String?       @unique
     colorScheme ColorScheme[]

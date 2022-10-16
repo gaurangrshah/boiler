@@ -50,7 +50,7 @@ export const colorSchemeSchema = z.object({
 
 export const preferenceSchema = z.object({
   id: z.string(errorMessages('id', 'string')),
-  // theme: z.string(errorMessages('theme', 'string')),
+  theme: z.string(errorMessages('theme', 'string')),
   userId: z.optional(z.string().nullable()),
   colorScheme: z.optional(z.array(colorSchemeSchema)),
 });
