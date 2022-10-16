@@ -1,11 +1,13 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { trpc } from "../utils/trpc";
-import { signIn, signOut, useSession } from "next-auth/react";
-import styles from "./index.module.css";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import { trpc } from '../utils/trpc';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import styles from './index.module.css';
+import { onPromise } from '@/utils';
+import { Spinner } from '@chakra-ui/react';
 
 const Home: NextPage = () => {
-  const { data } = trpc.example.hello.useQuery({ text: "from tRPC" });
+  const { data, status } = trpc.preference.all.useQuery();
 
   return (
     <>
@@ -54,7 +56,11 @@ const Home: NextPage = () => {
             />
           </div>
           <div className={styles.helloFrom}>
-            {data ? <p>{data.greeting}</p> : <p>Loading...</p>}
+            {status !== 'loading' ? (
+              <p>{JSON.stringify(data, null, 2)}</p>
+            ) : (
+              <Spinner />
+            )}
           </div>
           <AuthShowcase />
         </div>
@@ -76,9 +82,9 @@ const AuthShowcase: React.FC = () => {
       {secretMessage && <p>{secretMessage}</p>}
       <button
         className={styles.signInButton}
-        onClick={sessionData ? () => signOut() : () => signIn()}
+        onClick={onPromise(sessionData ? () => signOut() : () => signIn())}
       >
-        {sessionData ? "Sign out" : "Sign in"}
+        {sessionData ? 'Sign out' : 'Sign in'}
       </button>
     </div>
   );
