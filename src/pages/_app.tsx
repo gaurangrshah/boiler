@@ -8,7 +8,7 @@ import { NextRouter } from 'next/router';
 import { ErrorBoundary } from '@/utils';
 import { ChakraWrapper, FullScreenLoader } from 'chakra.ui/'; // theme provider: chakraui/utils/color-mode-manager.tsx
 import Head from 'next/head';
-import { type SessionWithUser } from '@/types';
+import { type SessionWithUser } from '@/lib/next-auth';
 import { useSession } from 'next-auth/react';
 import { MessageRouter } from 'chakra.ui';
 
