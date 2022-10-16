@@ -14,10 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -46,14 +42,16 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String       @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?      @unique
     emailVerified DateTime?
     password      String?
     image         String?
     accounts      Account[]
     sessions      Session[]
+    preferences   Preference[]
+    appDetail     AppDetail[]
 }
 
 model VerificationToken {
@@ -62,4 +60,44 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Preference {
+    id          String        @id @default(cuid())
+    user        User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String?       @unique
+    colorScheme ColorScheme[]
+
+    @@map("preferences")
+}
+
+model ColorScheme {
+    id            String      @unique @default(cuid())
+    primary       String
+    primaryDark   String
+    secondary     String
+    secondaryDark String
+    bg            String
+    bgDark        String
+    accent        String
+    accentDark    String
+    gray          String
+    grayDark      String
+    preferences   Preference? @relation(fields: [preferenceId], references: [id], onDelete: Cascade)
+    preferenceId  String?
+
+    @@map("colorScheme")
+}
+
+model AppDetail {
+    id      String  @unique @default(cuid())
+    name    String  @default("appsolute")
+    useCase String  @default("developers")
+    domain  String  @default("http://localhost:")
+    port    Int     @default(3000)
+    private Boolean @default(true)
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId  String  @unique
+
+    @@map("appDetails")
 }
