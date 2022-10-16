@@ -1,6 +1,6 @@
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 import { z } from 'zod';
-import { PrismaUser } from '@/types/zod/prisma';
+import { prismaUserSchema } from '@/schema';
 
 export const preferenceRouter = router({
   hello: publicProcedure
@@ -11,10 +11,7 @@ export const preferenceRouter = router({
       };
     }),
 
-  all: protectedProcedure.query(async ({ ctx }): Promise<PrismaUser> => {
-    if (!ctx.session.user.id) throw new Error('No user found.');
-    console.log(ctx.session.user.id);
-
+  all: protectedProcedure.output(prismaUserSchema).query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirstOrThrow({
       where: { id: ctx.session.user.id },
       include: {
