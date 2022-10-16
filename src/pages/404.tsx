@@ -1,5 +1,5 @@
 import { Button, Divider, Heading, Text, VStack } from '@chakra-ui/react';
-import { PageLayout } from 'chakraui/layouts/page-layout';
+import { PageLayout } from 'chakra.ui';
 import NextLink from 'next/link';
 
 const NotFoundPage = () => {
