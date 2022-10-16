@@ -8,14 +8,13 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && yarn gen:theme-typings",
     "lint": "next lint",
     "start": "next start",
     "studio": "npx prisma studio",
     "db:migrate": "npx prisma migrate dev --name $NAME --create-only && yarn prisma generate",
     "db:push": "npx prisma db push",
-    "gen:theme-typings": "chakra-cli tokens ./chakraui/theme/index.ts",
-    "postinstalltheme": "yarn gen:theme-typings"
+    "gen:theme-typings": "chakra-cli tokens ./chakra.ui/theme/index.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",
