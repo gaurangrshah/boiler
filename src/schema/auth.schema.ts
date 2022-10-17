@@ -22,6 +22,14 @@ export const magicAuthInputSchema = userInputSchema.pick({
   email: true,
 });
 
+export const passwordConfirmSchema = z.object({
+  passwordConfirm: z.string().min(8, 'Please confirm your password.'),
+});
+
+export const createUserOutputSchema = userInputSchema.merge(
+  passwordConfirmSchema
+);
+
 export const createUserInputSchema = userInputSchema
   .merge(
     z.object({

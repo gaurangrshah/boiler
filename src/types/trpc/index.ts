@@ -3,9 +3,9 @@ import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import { Session } from 'next-auth';
 
 interface WithUser extends Session {
-  id: string;
-  email: string;
-  image: string;
+  id?: string;
+  email?: string;
+  image?: string;
 }
 
 export type AppContextWithPrisma = {
