@@ -1,0 +1,12 @@
+{
+  "primary": "#2e5cb8",
+  "primaryDark": "#1a3366",
+  "secondary": "#4775d1",
+  "secondaryDark": "#7094db",
+  "bg": "#ebf0fa",
+  "bgDark": "#050a14",
+  "accent": "#99b3e5",
+  "accentDark": "#24478f",
+  "gray": "#eeeeee",
+  "grayDark": "#999999"
+}
