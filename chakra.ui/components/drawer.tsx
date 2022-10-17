@@ -38,7 +38,7 @@ export const Drawer = ({
       >
         <DrawerOverlay>
           <DrawerContent>
-            <DrawerCloseButton />
+            <DrawerCloseButton size="sm" />
             {Header && (
               <DrawerHeader>
                 <Header />

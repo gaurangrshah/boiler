@@ -12,7 +12,7 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
         left={0}
         bottom={0}
         top={0}
-        w={3}
+        w={4}
         onClick={onOpen}
         _hover={{ bg: 'brand.800' }}
       />
