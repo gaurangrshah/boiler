@@ -11,6 +11,7 @@ import Head from 'next/head';
 import { type SessionWithUser } from '@/lib/next-auth';
 import { useSession } from 'next-auth/react';
 import { MessageRouter } from 'chakra.ui';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const MyApp: AppType<{ session: SessionWithUser | null; cookies: string }> = ({
   Component,
@@ -42,6 +43,7 @@ const MyApp: AppType<{ session: SessionWithUser | null; cookies: string }> = ({
           </ChakraWrapper>
         </SessionProvider>
       </ErrorBoundary>
+      <ReactQueryDevtools initialIsOpen={false} />
     </>
   );
 };
