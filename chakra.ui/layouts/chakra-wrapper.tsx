@@ -4,10 +4,8 @@ import {
   localStorageManager,
 } from '@chakra-ui/react';
 import type { GetServerSidePropsContext } from 'next';
-import { trpc } from '../../src/utils';
-import { mergeTheme } from '../utils/mergeThemes';
 import { theme } from '../theme';
-import { omit } from '@/utils';
+import { useCustomTheme } from '../hooks/use-custom-theme';
 
 type ChakraProps = {
   cookies: string;
@@ -15,16 +13,7 @@ type ChakraProps = {
 };
 
 export const ChakraWrapper: React.FC<ChakraProps> = ({ cookies, children }) => {
-  const { data: user, status } = trpc.preference.all.useQuery();
-  let customTheme;
-  if (user && user?.preferences?.length && user?.preferences[0]?.colorScheme) {
-    const colorScheme = user?.preferences[0].colorScheme[0];
-
-    const _colorScheme = colorScheme
-      ? omit(colorScheme, 'prefernceId', 'id')
-      : {};
-    customTheme = mergeTheme(_colorScheme);
-  }
+  const customTheme = useCustomTheme();
 
   const colorModeManager =
     // https://chakra-ui.com/docs/styled-system/color-mode#add-colormodemanager-optional-for-ssr
