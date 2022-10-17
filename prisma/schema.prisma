@@ -84,7 +84,7 @@ model ColorScheme {
     accentDark    String      @default("#24478f")
     gray          String      @default("#eeeeee")
     grayDark      String      @default("#999999")
-    Preference    Preference? @relation(fields: [preferenceId], references: [id])
+    Preference    Preference? @relation(fields: [preferenceId], references: [id], onDelete: Cascade)
     preferenceId  String?
 
     @@map("colorScheme")
