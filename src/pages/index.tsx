@@ -4,7 +4,7 @@ import { trpc } from '../utils/trpc';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from './index.module.css';
 import { onPromise } from '@/utils';
-import { Spinner } from '@chakra-ui/react';
+import { chakra, Spinner } from '@chakra-ui/react';
 
 const Home: NextPage = () => {
   const { data, status } = trpc.preference.all.useQuery();
@@ -19,7 +19,7 @@ const Home: NextPage = () => {
       <div className={styles.containerOuter}>
         <div className={styles.containerInner}>
           <h1 className={styles.title}>
-            Create <span className={styles.titlePink}>T3</span> App
+            Create <chakra.span color="brand.400">T3</chakra.span> App
           </h1>
 
           <h3 className={styles.subtitle}>This stack uses:</h3>

@@ -1,10 +1,12 @@
-// import { trpc } from '@/utils';
 import { ChakraTheme, extendTheme } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { theme } from '../theme';
+import { trpc } from 'src/utils/trpc';
 
-export function useCustomTheme(): Partial<ChakraTheme> {
+export function useCustomTheme(
+  serverTheme: ChakraTheme['colors']
+): Partial<ChakraTheme> {
   // const { data: session, status } = useSession();
   // let _id = '';
   // if (session?.user) {
@@ -12,11 +14,7 @@ export function useCustomTheme(): Partial<ChakraTheme> {
   // }
 
   const [customTheme, setCustomTheme] = useState<Partial<ChakraTheme>>(theme);
-
-  // const { data: prefs } = trpc.useQuery(['prefs.all'], {
-  //   enabled: !!_id,
-  // });
-
+  const { data, status } = trpc.preference.all.useQuery();
   // const colorScheme = prefs?.ColorScheme && prefs?.ColorScheme;
 
   // const isLoading = status === 'loading';
