@@ -29,7 +29,7 @@ export const CustomIcon: React.FC<CustomIconProps> = ({
         {...rest}
       >
         {paths[icon]?.d.map((d: string, i: number) => (
-          <path key={i} d={d} />
+          <path key={i} d={d} transform={paths[icon]?.transform} />
         ))}
       </Box>
     );
