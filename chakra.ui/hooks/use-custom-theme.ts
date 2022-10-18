@@ -23,7 +23,7 @@ export function useCustomTheme(): Partial<ChakraTheme> {
     const colors = colorScheme ? omit(colorScheme, 'prefernceId', 'id') : {};
 
     setCustomTheme(mergeTheme(colors));
-  }, [user, customTheme, isLoading, setCustomTheme]);
+  }, [user, isLoading]);
 
   return customTheme;
 }

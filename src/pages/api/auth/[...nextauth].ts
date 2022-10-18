@@ -7,7 +7,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/server/db/client';
 import { env } from '@/env/server.mjs';
 import { ONE_DAY, omit } from '@/utils';
-import { User } from '@prisma/client';
+import { PrismaUser } from '@/types/zod/prisma';
 import { authorize } from '@/lib/next-auth/authorize';
 import { onCreateuser } from '../../../lib/next-auth/onCreateUser';
 
@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user = omit(session.user, 'password') as User;
+        session.user = omit(session.user, 'password') as PrismaUser;
       }
       return session;
     },
@@ -39,14 +39,14 @@ export const authOptions: NextAuthOptions = {
 
     EmailProvider({
       server: {
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
+        host: env.SMTP_HOST,
+        port: Number(env.SMTP_PORT),
         auth: {
-          user: process.env.EMAIL_FROM,
-          pass: process.env.SMTP_PASS,
+          user: env.EMAIL_FROM,
+          pass: env.SMTP_PASS,
         },
       },
-      from: process.env.EMAIL_FROM,
+      from: env.EMAIL_FROM,
       maxAge: ONE_DAY, // email login links valid for 24 hrs.
 
       /**
@@ -89,7 +89,7 @@ export const authOptions: NextAuthOptions = {
    * @link: https://next-auth.js.org/configuration/pages
    * */
   pages: {
-    // signIn: '/auth/signin',
+    signIn: '/auth/signin',
     //   signOut: '/auth/signout',
     //   error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)

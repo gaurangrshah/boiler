@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { trpc } from '../utils/trpc';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from './index.module.css';
@@ -8,7 +7,6 @@ import { chakra, Spinner } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
 
 const Home: NextPage = () => {
-  const { data, status } = trpc.preference.all.useQuery();
 
   return (
     <>
@@ -22,47 +20,6 @@ const Home: NextPage = () => {
             <h1 className={styles.title}>
               Create <chakra.span color="brand.400">T3</chakra.span> App
             </h1>
-
-            <h3 className={styles.subtitle}>This stack uses:</h3>
-            <div className={styles.cardGrid}>
-              <TechnologyCard
-                name="NextJS"
-                description="The React framework for production"
-                documentation="https://nextjs.org/"
-              />
-              <TechnologyCard
-                name="TypeScript"
-                description="Strongly typed programming language that builds on JavaScript, giving you better tooling at any scale"
-                documentation="https://www.typescriptlang.org/"
-              />
-              <TechnologyCard
-                name="TailwindCSS"
-                description="Rapidly build modern websites without ever leaving your HTML"
-                documentation="https://tailwindcss.com/"
-              />
-              <TechnologyCard
-                name="tRPC"
-                description="End-to-end typesafe APIs made easy"
-                documentation="https://trpc.io/"
-              />
-              <TechnologyCard
-                name="Next-Auth"
-                description="Authentication for Next.js"
-                documentation="https://next-auth.js.org/"
-              />
-              <TechnologyCard
-                name="Prisma"
-                description="Build data-driven JavaScript & TypeScript apps in less time"
-                documentation="https://www.prisma.io/docs/"
-              />
-            </div>
-            <div className={styles.helloFrom}>
-              {status !== 'loading' ? (
-                <p>{JSON.stringify(data, null, 2)}</p>
-              ) : (
-                <Spinner />
-              )}
-            </div>
             <AuthShowcase />
           </div>
         </div>
@@ -89,32 +46,5 @@ const AuthShowcase: React.FC = () => {
         {sessionData ? 'Sign out' : 'Sign in'}
       </button>
     </div>
-  );
-};
-
-type TechnologyCardProps = {
-  name: string;
-  description: string;
-  documentation: string;
-};
-
-const TechnologyCard = ({
-  name,
-  description,
-  documentation,
-}: TechnologyCardProps) => {
-  return (
-    <section className={styles.card}>
-      <h2 className={styles.cardTitle}>{name}</h2>
-      <p className={styles.cardDescription}>{description}</p>
-      <a
-        className={styles.cardDocumentation}
-        href={documentation}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Documentation
-      </a>
-    </section>
   );
 };

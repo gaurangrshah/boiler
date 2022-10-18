@@ -1,5 +1,19 @@
 # Create T3 App
 
+> This project relies on Chakra-UI instead of tailwinds.
+> This is mainly due to accessibility concerns and ease of use.
+
+## Additional Packages:
+
+```shell
+yarn add @chakra-ui/icons @chakra-ui/react @chakra-ui/theme-tools @emotion/react @emotion/styled @hookform/resolvers react-hook-form argon2 nodemailer framer-motion next-seo @tanstack/react-query-devtools
+```
+
+```shell
+yarn add -d @chakra-ui/cli @types/nodemailer @types/nodemailer-smtp-transport eslint-config-prettier next-sitemap
+```
+
+<hr />
 This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
 
 ## Why are there `.js` files in here?
