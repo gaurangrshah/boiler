@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { onPromise, trpc } from '@/utils';
 import { CustomIcon } from 'chakra.ui/icons';
 import { parseFormData } from '../../utils/form';
-import { UserRegistrationForm } from '@/components';
+import { MagicAuthForm } from '@/components/auth/magic-auth';
 
 type SignView = 'magic' | 'oauth' | 'register';
 const AuthPage: React.FC = (): JSX.Element => {
@@ -37,7 +37,6 @@ const AuthPage: React.FC = (): JSX.Element => {
   // const isCredentialAuth = signInView === 'credentials';
   const isOAuth = signInView === 'oauth';
   const isSigninRoute = isMagicAuth || isOAuth;
-  const { data } = trpc.auth.formUtils.useQuery();
 
   useEffect(() => {
     const view = asPath.split('/')[3] || 'magic';
@@ -78,7 +77,11 @@ const AuthPage: React.FC = (): JSX.Element => {
             <>
               {isMagicAuth && (
                 <>
-                  <VStack w="full" color="white">
+                  <MagicAuthForm
+                    csrfToken={data?.csrfToken}
+                    providerId="email"
+                  />
+                  {/* <VStack w="full" color="white">
                     <chakra.form
                       onSubmit={onPromise(async (e) => {
                         e.preventDefault();
@@ -122,7 +125,7 @@ const AuthPage: React.FC = (): JSX.Element => {
                         </InputRightElement>
                       </InputGroup>
                     </chakra.form>
-                  </VStack>
+                  </VStack> */}
                 </>
               )}
               {isOAuth && (
