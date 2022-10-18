@@ -1,5 +1,5 @@
+import { AuthenticateUserInput, CreateUserInput } from '@/types';
 import { BasicConfig } from './types';
-import { CreateUserInput, AuthenticateUserInput } from '@/types';
 
 export const UserRegistrationConfig: BasicConfig<CreateUserInput> = {
   defaultValues: {

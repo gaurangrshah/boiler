@@ -1,16 +1,14 @@
-import { credentialsLogin } from '@/lib/next-auth';
+import { mapFieldsToInputs } from '@/components/hook-form/poly-input';
 import { authenticateUserInputSchema } from '@/schema';
 import { AuthenticateUserInput } from '@/types';
 import { onPromise } from '@/utils';
 import { Button, HStack, Spinner, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { mapFieldsToInputs } from '@/components';
+import { signIn, SignInResponse } from 'next-auth/react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { RegisterLink } from './register-link';
-import { SignInResponse } from 'next-auth/react';
 import { UserAuthorizationConfig } from '../hook-form/field-configs';
 
-export const CredentialsAuthForm: React.FC = () => {
+export const CredentialsFormNew: React.FC = () => {
   const { defaultValues, fields } = UserAuthorizationConfig;
 
   const methods = useForm<AuthenticateUserInput>({
@@ -20,8 +18,12 @@ export const CredentialsAuthForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<AuthenticateUserInput> = async (
     values
-  ): Promise<SignInResponse | undefined> => credentialsLogin(values);
-
+  ): Promise<SignInResponse | undefined> =>
+    await signIn('credentials', {
+      callbackUrls: '/?success="Welcome!"',
+      redirect: true,
+      ...values,
+    });
   return (
     <FormProvider {...methods}>
       <VStack
@@ -33,7 +35,6 @@ export const CredentialsAuthForm: React.FC = () => {
       >
         {fields.map(mapFieldsToInputs)}
         <HStack w="full" justify="space-between">
-          <RegisterLink />
           <Button
             type="submit"
             colorScheme="blue"

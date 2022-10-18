@@ -1,3 +1,6 @@
+import { magicAuthInputSchema } from '@/schema';
+import { MagicAuthInput } from '@/types';
+import { onPromise, trpc } from '@/utils';
 import {
   FormControl,
   FormErrorMessage,
@@ -10,13 +13,10 @@ import {
   Spinner,
   VStack,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { CustomIcon } from 'chakra.ui/icons';
 import { signIn } from 'next-auth/react';
-import { onPromise, trpc } from '@/utils';
-import { MagicAuthInput } from '@/types';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { magicAuthInputSchema } from '@/schema';
 
 type MagicAuthInputWithToken = {
   csrfToken: string | undefined;
