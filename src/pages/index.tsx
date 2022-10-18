@@ -1,13 +1,12 @@
-import type { NextPage } from 'next';
-import { trpc } from '../utils/trpc';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import styles from './index.module.css';
 import { onPromise } from '@/utils';
-import { chakra, Spinner } from '@chakra-ui/react';
+import { chakra } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
+import type { NextPage } from 'next';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { trpc } from '../utils/trpc';
+import styles from './index.module.css';
 
 const Home: NextPage = () => {
-
   return (
     <>
       <PageLayout
