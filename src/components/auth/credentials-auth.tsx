@@ -20,8 +20,8 @@ export const CredentialsFormNew: React.FC = () => {
     values
   ): Promise<SignInResponse | undefined> =>
     await signIn('credentials', {
-      callbackUrls: '/?success="Welcome!"',
-      redirect: true,
+      // callbackUrls: '/?success="Welcome!"',
+      // redirect: true,
       ...values,
     });
   return (

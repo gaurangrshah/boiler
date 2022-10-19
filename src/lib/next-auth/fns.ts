@@ -1,3 +1,4 @@
+import { PrismaUser } from '@/types/zod/prisma';
 import { signIn } from 'next-auth/react';
 
 export type AuthenticateUserInput = {
@@ -7,9 +8,9 @@ export type AuthenticateUserInput = {
 
 export async function emailLogin(email: string): Promise<void> {
   await signIn('email', {
-    callbackUrl:
-      '/verify-request?success="please check your email for access."',
-    redirect: true,
+    // callbackUrl:
+    //   '/verify-request?success="please check your email for access."',
+    redirect: false,
     email,
   });
 }

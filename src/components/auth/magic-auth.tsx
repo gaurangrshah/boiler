@@ -46,7 +46,7 @@ export const MagicAuthForm: React.FC = () => {
     values
   ): Promise<void> => {
     await signIn('email', {
-      callbackUrl: '/auth/verify-request?success=Please check your email.',
+      // callbackUrl: '/auth/verify-request?success=Please check your email.',
       email: values?.email,
       csrfToken: data?.csrfToken,
     });
