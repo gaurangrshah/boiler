@@ -1,4 +1,4 @@
-import { isBrowser } from '@/utils';
+import { isBrowser, ONE_SECOND } from '@/utils';
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -26,6 +26,10 @@ export const MessageRouter = ({ asPath }: MessageRouterProps) => {
       const isSuccess: boolean = asPath.includes('?success=');
       if (isError) {
         const [basepath, message] = asPath.split('?error=');
+        console.warn(
+          '🚀 | file: message-router.tsx | line 29 | message',
+          message
+        );
         let isJson = false;
         try {
           isJson = !!JSON.parse(message || '');
@@ -48,6 +52,11 @@ export const MessageRouter = ({ asPath }: MessageRouterProps) => {
       } else if (isSecondaryError) {
         const [basepath, message] = asPath.split('&error=');
         if (typeof message === 'string') {
+          // if (message === 'CredentialsSignin') {
+          //   setError('Please register first.');
+          // } else {
+          //   setError(String(message));
+          // }
           setError(String(message));
         }
         void router.replace(basepath || '/');
@@ -66,9 +75,9 @@ export const MessageRouter = ({ asPath }: MessageRouterProps) => {
       title: error ? 'Error' : 'Success',
       description: error ? error : success,
       status: error ? 'error' : 'success',
-      duration: 9000,
+      duration: 9 * ONE_SECOND,
       position: 'top-right',
-      isClosable: false,
+      isClosable: true,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, success]);
