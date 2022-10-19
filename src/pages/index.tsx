@@ -34,7 +34,7 @@ const AuthShowcase: React.FC = () => {
     undefined,
     { ...cancelRetry }
   );
-  dev.log('file: index.tsx | line 34 | secretMessage', secretMessage, false);
+  dev.log('file: index.tsx | line 37 | secretMessage', secretMessage, false);
   const { data: sessionData } = useSession();
 
   return (

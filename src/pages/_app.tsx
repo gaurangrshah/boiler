@@ -19,7 +19,7 @@ const MyApp: AppType<{ session: SessionWithUser | null; cookies: string }> = ({
 }) => {
   const { asPath } = router as NextRouter;
   const { auth } = Component as NextComponentType & { auth?: boolean };
-  dev.log('file: _app.tsx | line 23 | asPath', asPath, true);
+  dev.log('file: _app.tsx | line 23 | asPath', asPath, false);
 
   return (
     <>

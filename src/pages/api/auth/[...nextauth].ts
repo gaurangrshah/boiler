@@ -15,6 +15,9 @@ const debug: boolean = globalDebug || false;
 
 export const authOptions: NextAuthOptions = {
   debug,
+  cookies: {
+    //
+  },
   jwt: {
     maxAge: 30 * ONE_DAY,
   },
