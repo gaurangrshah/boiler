@@ -46,4 +46,15 @@ export const clientSchema = z.object({
 export const clientEnv = {
   // NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
   NEXT_PUBLIC_DEBUG: z.string(),
+  NEXTAUTH_URL: z.preprocess(
+    // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
+    // Since NextAuth automatically uses the VERCEL_URL if present.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    (/** @type {any} */ str) => process.env.VERCEL_URL ?? str,
+    // VERCEL_URL doesnt include `https` so it cant be validated as a URL
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    process.env.VERCEL ? z.string() : z.string().url()
+  ),
 };
