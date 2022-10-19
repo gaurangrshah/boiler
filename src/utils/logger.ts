@@ -20,6 +20,6 @@ export const dev = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: (str: string, obj?: any, d?: boolean) => {
     if ((!debug && !d) || isProd) return;
-    console.error(logColors.red, str, obj);
+    console.warn(logColors.red, str, obj);
   },
 };
