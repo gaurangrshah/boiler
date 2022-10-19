@@ -1,7 +1,7 @@
 import { mapFieldsToInputs } from '@/components/hook-form';
 import { createUserOutputSchema } from '@/schema';
 import { UserInput } from '@/types';
-import { isBrowser, onPromise, trpc } from '@/utils';
+import { debug, dev, isBrowser, onPromise, trpc } from '@/utils';
 import { Button, Spinner, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
@@ -20,13 +20,14 @@ export const UserRegistrationForm: React.FC = () => {
   const { mutate, isLoading } = trpc.auth.registerUser.useMutation({
     onSuccess: () => {
       if (isBrowser) {
+        dev.log('auth.registerUser: success', debug)
         void router.push('/auth/signin?success=User Created Successfully');
       }
     },
     onError: (error) => {
       if (error) {
         if (isBrowser) {
-          console.error(error);
+          dev.error('auth.registerUser: error', error, true);
           void router.replace(`/auth/register?error=${error.message}`);
         }
       }

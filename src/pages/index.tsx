@@ -1,5 +1,5 @@
-import { cancelRetry, dev, ONE_MIN, onPromise } from '@/utils';
-import { chakra } from '@chakra-ui/react';
+import { cancelRetry, dev, onPromise } from '@/utils';
+import { Button, chakra } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -32,21 +32,27 @@ export default Home;
 const AuthShowcase: React.FC = () => {
   const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery(
     undefined,
-    { ...cancelRetry }
+    {
+      ...cancelRetry,
+      onSuccess: (data): void => {
+        dev.log('file: index.tsx | line 38 | secretMessage', data);
+      },
+      onError: (error): void => {
+        dev.error('file: index.tsx | line 41 | secretMessage:Error', error);
+      },
+    }
   );
-  dev.log('file: index.tsx | line 37 | secretMessage', secretMessage, false);
   const { data: sessionData } = useSession();
 
   return (
     <div className={styles.authShowcase}>
       {sessionData && <p>Logged in as {sessionData?.user?.name}</p>}
       {secretMessage && <p>{secretMessage}</p>}
-      <button
-        className={styles.signInButton}
+      <Button
         onClick={onPromise(sessionData ? () => signOut() : () => signIn())}
       >
         {sessionData ? 'Sign out' : 'Sign in'}
-      </button>
+      </Button>
     </div>
   );
 };

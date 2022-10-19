@@ -1,4 +1,4 @@
-import { isBrowser, ONE_SECOND } from '@/utils';
+import { debug, dev, isBrowser, ONE_SECOND } from '@/utils';
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -26,9 +26,10 @@ export const MessageRouter = ({ asPath }: MessageRouterProps) => {
       const isSuccess: boolean = asPath.includes('?success=');
       if (isError) {
         const [basepath, message] = asPath.split('?error=');
-        console.warn(
-          '🚀 | file: message-router.tsx | line 29 | message',
-          message
+        dev.error(
+          'file: message-router.tsx | line 29 | message',
+          message,
+          debug
         );
         let isJson = false;
         try {

@@ -1,5 +1,7 @@
+import { debug as globalDebug, dev } from '@/utils';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
+const debug: boolean = globalDebug || true;
 interface Props {
   children?: ReactNode;
 }
@@ -20,7 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
+    dev.error('Uncaught error:', { error, errorInfo }, debug);
   }
 
   public render() {

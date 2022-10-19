@@ -1,3 +1,4 @@
+import { debug as globalDebug, dev } from '@/utils';
 import {
   ChakraTheme,
   extendTheme,
@@ -6,6 +7,8 @@ import {
   withDefaultProps,
 } from '@chakra-ui/react';
 import { styles } from './global';
+
+const debug = globalDebug || false;
 
 const colors: ChakraTheme['colors'] = {
   brand: {
@@ -144,4 +147,4 @@ export const theme: Partial<ChakraTheme> = extendTheme(
   })
 );
 
-// console.log(theme);
+dev.log('chakra theme', theme, debug);

@@ -1,10 +1,13 @@
+import { comparePasswords, hashPassword } from '@/lib/argon2';
 import { type AppContextWithPrisma, type AuthenticateUserInput } from '@/types';
+import { dev, omit, debug as globalDebug } from '@/utils';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as trpc from '@trpc/server';
-import { comparePasswords, hashPassword } from '../../../lib/argon2';
-import { omit } from '../../../utils';
 import { createUser, findUserWithPW, updateUser } from '../services';
+
+
+const debug:boolean = globalDebug || true;
 
 /**
  *
@@ -32,7 +35,7 @@ export const createOrUpdateUserHandler = async ({
   const password = await hashPassword(String(plainPassword));
 
   if (userExists) {
-    console.log('👍 Updating User');
+    dev.log('👍 Updating User', null, debug);
     input.password = password;
     try {
       let _user: Partial<User> | undefined;
@@ -50,14 +53,14 @@ export const createOrUpdateUserHandler = async ({
       });
     }
   } else {
-    console.log('👎 Creating User');
+    dev.log('👎 Creating User', null, debug);
     try {
       const user = await createUser({
         name: String(input.name),
         email: String(input.email),
         password: password,
       });
-      console.log('👍 user created', user);
+      dev.log('👍 user created', user, debug);
       return {
         status: 'success',
         data: { user },
@@ -99,7 +102,7 @@ export const authenticateUserHandler = async ({
       throw new Error('No password found.');
     }
   } catch (error) {
-    console.log('🔴', error);
+    dev.log('🔴', error, debug);
     // throw generic error if not related to prisma
     throw new trpc.TRPCError({
       code: 'INTERNAL_SERVER_ERROR',

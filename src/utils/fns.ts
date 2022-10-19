@@ -1,3 +1,8 @@
+import { debug as globalDebug, isDev } from './constants';
+import { dev } from './logger';
+
+const debug: boolean = globalDebug || (isDev && true);
+
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => null;
 
@@ -25,7 +30,7 @@ export function onPromise<T>(
   return (event: React.SyntheticEvent) => {
     if (promise) {
       promise(event).catch((error) => {
-        console.error('Unexpected error', error);
+        dev.error('Unexpected error', error, debug);
       });
     }
   };
