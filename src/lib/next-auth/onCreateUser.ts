@@ -1,8 +1,9 @@
-import newAppDetail from '__data/prisma-defaults/new-app-detail.json';
-import newPreference from '__data/prisma-defaults/new-preference.json';
-import newColorScheme from '__data/prisma-defaults/new-colorScheme.json';
 import { prisma } from '@/server/db/client';
 import { PrismaUser } from '@/types/zod/prisma';
+import { dev } from '@/utils';
+import newAppDetail from '__data/prisma-defaults/new-app-detail.json';
+import newColorScheme from '__data/prisma-defaults/new-colorScheme.json';
+import newPreference from '__data/prisma-defaults/new-preference.json';
 import { getUsernameFromEmail } from '../../utils/fns';
 
 export const onCreateuser = async ({
@@ -10,6 +11,7 @@ export const onCreateuser = async ({
   name,
   email,
 }: Pick<PrismaUser, 'id' | 'name' | 'email'>) => {
+  dev.log('onCreateUser.ts | line 13', { id, name, email });
   return await prisma.user.update({
     where: {
       id,

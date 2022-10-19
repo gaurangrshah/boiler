@@ -1,8 +1,9 @@
 // src/pages/api/trpc/[trpc].ts
+import { dev } from '@/utils';
 import { createNextApiHandler } from '@trpc/server/adapters/next';
-import { appRouter } from '../../../server/trpc/router/_app';
-import { createContext } from '../../../server/trpc/context';
 import { env } from '../../../env/server.mjs';
+import { createContext } from '../../../server/trpc/context';
+import { appRouter } from '../../../server/trpc/router/_app';
 
 // export API handler
 export default createNextApiHandler({
@@ -12,10 +13,10 @@ export default createNextApiHandler({
     env.NODE_ENV === 'development'
       ? ({ path, error }) => {
           if (error.code === 'INTERNAL_SERVER_ERROR') {
-            console.error('Something went wrong', error);
+            dev.error('Something went wrong', error, true);
           }
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          console.error(`❌ tRPC failed on ${path ?? ''}: ${error}`);
+          dev.error(`❌ tRPC failed on ${path ?? ''}: ${error}`, '', true);
         }
       : undefined,
 });

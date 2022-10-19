@@ -1,5 +1,5 @@
 import { prisma } from '@/server/db/client';
-import { omit } from '@/utils';
+import { dev, omit } from '@/utils';
 import { User } from '@prisma/client';
 import { comparePasswords } from '../argon2';
 
@@ -14,22 +14,25 @@ export async function authorize(
   };
 
   try {
-    console.log('🔒 authorizing user', email);
+    dev.log('🔒 authorizing user', email);
     const user = await prisma.user.findFirstOrThrow({ where: { email } });
-    console.log('🙋‍♂️ userFound:', !!user);
+    dev.log('🙋‍♂️ userFound:', !!user);
     if (!user || !user.password || typeof user.password !== 'string') {
       return null;
     }
-    const pwMatch = await comparePasswords(password, user.password.toString());
+    const pwMatch = await comparePasswords(
+      String(password),
+      String(user.password)
+    );
 
+    dev.log('🔵 | authorize: pws match:', pwMatch);
     if (pwMatch) {
-      console.log('🚀 | file: authorize.ts | line 18 | user', user);
       return user;
     } else throw new Error('Invalid Credentails.');
 
     return null;
   } catch (error) {
-    console.log('Authorization Error', error);
+    dev.error('Authorization Error', error);
   }
   return null;
 }

@@ -1,7 +1,7 @@
 // src/pages/_app.tsx
 // import '../styles/globals.css';
 import { type SessionWithUser } from '@/lib/next-auth';
-import { ErrorBoundary } from '@/utils';
+import { dev, ErrorBoundary } from '@/utils';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { MessageRouter } from 'chakra.ui';
 import { ChakraWrapper, FullScreenLoader } from 'chakra.ui/'; // theme provider: chakraui/utils/color-mode-manager.tsx
@@ -19,7 +19,7 @@ const MyApp: AppType<{ session: SessionWithUser | null; cookies: string }> = ({
 }) => {
   const { asPath } = router as NextRouter;
   const { auth } = Component as NextComponentType & { auth?: boolean };
-  console.log('🚀 | file: _app.tsx | line 23 | asPath', asPath);
+  dev.log('file: _app.tsx | line 23 | asPath', asPath, true);
 
   return (
     <>
