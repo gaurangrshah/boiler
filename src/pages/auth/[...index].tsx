@@ -1,6 +1,6 @@
 import {
   AuthTabLink,
-  CredentialsFormNew,
+  // CredentialsFormNew,
   MagicAuthForm,
   OAuthButtons,
   RegisterLink,
@@ -38,7 +38,7 @@ const AuthPage: React.FC = (): JSX.Element => {
   // routing booleans
   const isRegister = signInView === 'register';
   const isMagicAuth = signInView === 'magic';
-  const isCredentialAuth = signInView === 'credentials';
+  // const isCredentialAuth = signInView === 'credentials';
   const isOAuth = signInView === 'oauth';
   const isSigninRoute = asPath.includes('signin');
   const isVerify = signInView === 'verify-request';
