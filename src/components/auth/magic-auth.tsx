@@ -1,6 +1,6 @@
 import { magicAuthInputSchema } from '@/schema';
 import { MagicAuthInput } from '@/types';
-import { cancelRetry, onPromise, trpc } from '@/utils';
+import { cancelRetry, dev, onPromise, trpc } from '@/utils';
 import {
   FormControl,
   FormErrorMessage,
@@ -26,6 +26,7 @@ export const MagicAuthForm: React.FC = () => {
   const { data } = trpc.auth.formUtils.useQuery(undefined, {
     ...cancelRetry,
   });
+  dev.log('NEXT_PUBLIC_DEBUG:', process.env.NEXT_PUBLIC_DEBUG);
 
   const {
     register,

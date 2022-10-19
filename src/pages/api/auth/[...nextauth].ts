@@ -131,7 +131,7 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/signin',
     //   signOut: '/auth/signout',
     //   error: '/auth/error', // Error code passed in query string as ?error=
-    // verifyRequest: '/auth/verify-request', // (used for check email message)
+    verifyRequest: '/auth/verify-request', // (used for check email message)
     newUser: '/auth/signin/register', // New users will be directed here on first sign in
     // NOTE: see here for error handling: https://next-auth.js.org/configuration/pages#error-codes
   },

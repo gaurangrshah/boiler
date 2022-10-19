@@ -4,3 +4,4 @@ export * from './magic-auth';
 export * from './oauth-buttons';
 export * from './register-form';
 export * from './register-link';
+export * from './verify-request';

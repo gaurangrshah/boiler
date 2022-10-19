@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react';
 
 export default function AdminDashboard() {
   const { data: session } = useSession();
-  console.log('🚀 | file: admin.tsx | line 5 | session', session);
   // session is always non-null inside this page, all the way down the React tree.
   return (
     <PageLayout title="Admin Dashboard" type="default">
