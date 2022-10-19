@@ -37,9 +37,6 @@ const AuthShowcase: React.FC = () => {
       onSuccess: (data): void => {
         dev.log('file: index.tsx | line 38 | secretMessage', data);
       },
-      onError: (error): void => {
-        dev.error('file: index.tsx | line 41 | secretMessage:Error', error);
-      },
     }
   );
   const { data: sessionData } = useSession();

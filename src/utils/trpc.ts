@@ -5,15 +5,25 @@ import superjson from 'superjson';
 import type { AppRouter } from '../server/trpc/router/_app';
 import { debug, ONE_SECOND } from './constants';
 import { getBaseUrl } from './fns';
+import { dev } from './logger';
 
 export const trpc = createTRPCNext<AppRouter>({
   config({ ctx }) {
     return {
       transformer: superjson,
       queryClientConfig: {
+        logger: {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          log: (...args) => dev.log('querylog:', ...args),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          warn: (...args) => dev.log('querylog:', ...args),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          error: (...args) => dev.error('querylog:', ...args),
+        },
         defaultOptions: {
           queries: {
             staleTime: 5 * ONE_SECOND,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             retry: (failureCount, error: any) => {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
               const trcpErrorCode = error?.data?.code;
