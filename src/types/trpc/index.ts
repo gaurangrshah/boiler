@@ -1,6 +1,6 @@
-import { type PrismaClientType } from '../prisma';
 import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import { Session } from 'next-auth';
+import { type PrismaClientType } from '../prisma';
 
 interface WithUser extends Session {
   id?: string;
@@ -18,7 +18,7 @@ export type TRPCErrorResult = {
   message?: string;
   code: TRPC_ERROR_CODE_KEY;
   originalError: unknown;
-  cause: unknown;
+  cause: Error | undefined;
 };
 
 /**
