@@ -1,16 +1,17 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth';
-import SpotifyProvider from 'next-auth/providers/spotify';
-import EmailProvider from 'next-auth/providers/email';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import EmailProvider from 'next-auth/providers/email';
+import SpotifyProvider from 'next-auth/providers/spotify';
 // Prisma adapter for NextAuth, optional and can be removed
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { prisma } from '@/server/db/client';
 import { env } from '@/env/server.mjs';
-import { ONE_DAY, omit } from '@/utils';
-import { PrismaUser } from '@/types/zod/prisma';
 import { authorize } from '@/lib/next-auth/authorize';
-import { onCreateuser } from '../../../lib/next-auth/onCreateUser';
-
+import { onCreateuser } from '@/lib/next-auth/onCreateUser';
+import { prisma } from '@/server/db/client';
+import { PrismaAccount, PrismaUser } from '@/types/zod/prisma';
+import { omit, ONE_DAY, wait } from '@/utils';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { User } from 'next-auth';
+import { AdapterUser } from 'next-auth/adapters';
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   jwt: {
@@ -18,15 +19,32 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     maxAge: 30 * ONE_DAY,
-    // strategy: 'jwt
   },
   callbacks: {
     session({ session, user }) {
       if (session.user) {
+        console.log(
+          '🚀 | file: [...nextauth].ts | line 27 | session.user',
+          session.user,
+          user
+        );
         session.user.id = user.id;
         session.user = omit(session.user, 'password') as PrismaUser;
+        console.log(
+          '🚀 | file: [...nextauth].ts | line 27 | session.user',
+          session.user
+        );
       }
       return session;
+    },
+    signIn({
+      user,
+      account,
+    }) {
+
+
+
+      return true;
     },
   },
 
@@ -62,24 +80,24 @@ export const authOptions: NextAuthOptions = {
       // },
     }),
 
-    // CredentialsProvider({
-    //   type: 'credentials',
-    //   credentials: {
-    //     // @link: https://next-auth.js.org/configuration/providers/credentials#how-to
-    //     // The credentials is used to generate a suitable form on the sign in page.
-    //     // You can specify whatever fields you are expecting to be submitted.
-    //     email: {
-    //       label: 'Email',
-    //       type: 'text',
-    //       placeholder: 'you@youremail.com',
-    //     },
-    //     password: { label: 'Password', type: 'password' },
-    //   },
+    CredentialsProvider({
+      type: 'credentials',
+      credentials: {
+        // @link: https://next-auth.js.org/configuration/providers/credentials#how-to
+        // The credentials is used to generate a suitable form on the sign in page.
+        // You can specify whatever fields you are expecting to be submitted.
+        email: {
+          label: 'Email',
+          type: 'text',
+          placeholder: 'you@youremail.com',
+        },
+        password: { label: 'Password', type: 'password' },
+      },
 
-    //   authorize: async (
-    //     credentials: Record<'email' | 'password', string> | undefined
-    //   ) => authorize(credentials),
-    // }),
+      authorize: async (
+        credentials: Record<'email' | 'password', string> | undefined
+      ) => authorize(credentials),
+    }),
 
     // ...add more providers here
   ],
@@ -93,7 +111,7 @@ export const authOptions: NextAuthOptions = {
     //   signOut: '/auth/signout',
     //   error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)
-    // newUser: '/auth/register', // New users will be directed here on first sign in
+    newUser: '/auth/signin/register', // New users will be directed here on first sign in
     // NOTE: see here for error handling: https://next-auth.js.org/configuration/pages#error-codes
   },
 
@@ -109,7 +127,14 @@ export const authOptions: NextAuthOptions = {
       });
     },
     // async updateUser(message) { /* user updated - e.g. their email was verified */ },
-    // async linkAccount(message) { /* account (e.g. Twitter) linked to a user */ },
+    async linkAccount(message) {
+      console.log('🚀 | file: [...nextauth].ts | line 114 | message', message);
+      const { user, account, profile } = message;
+      if (!account && !user.name) {
+        await wait(500);
+        console.log('no account or user.name found');
+      }
+    },
     // async session(message) { /* session is active */ },
   },
 };

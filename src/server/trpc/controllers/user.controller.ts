@@ -1,10 +1,9 @@
-import { comparePasswords, hashPassword } from '../../../lib/argon2';
-import { type AppContextWithPrisma } from '@/types';
-import { omit } from '../../../utils';
+import { type AppContextWithPrisma, type AuthenticateUserInput } from '@/types';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as trpc from '@trpc/server';
-import { type AuthenticateUserInput } from '@/types';
+import { comparePasswords, hashPassword } from '../../../lib/argon2';
+import { omit } from '../../../utils';
 import { createUser, findUserWithPW, updateUser } from '../services';
 
 /**
@@ -58,6 +57,7 @@ export const createOrUpdateUserHandler = async ({
         email: String(input.email),
         password: password,
       });
+      console.log('👍 user created', user);
       return {
         status: 'success',
         data: { user },

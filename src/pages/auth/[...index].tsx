@@ -32,7 +32,7 @@ const AuthPage: React.FC = (): JSX.Element => {
   const isMagicAuth = signInView === 'magic';
   const isCredentialAuth = signInView === 'credentials';
   const isOAuth = signInView === 'oauth';
-  const isSigninRoute = isMagicAuth || isOAuth;
+  const isSigninRoute = isMagicAuth || isOAuth || isCredentialAuth;
 
   useEffect(() => {
     const view = asPath.split('/')[3] || 'magic';
@@ -43,8 +43,8 @@ const AuthPage: React.FC = (): JSX.Element => {
   const shadow = colorMode === 'light' ? 'sm' : 'md-dark';
 
   useEffect(() => {
-    if (isAuth) void router.push('/');
-  }, [isAuth, router]);
+    if (isAuth && !asPath.includes('register')) void router.push('/');
+  }, [isAuth, asPath, router]);
 
   return (
     <PageLayout title={asPath} type="default">
@@ -68,7 +68,7 @@ const AuthPage: React.FC = (): JSX.Element => {
             color="transparent"
             shadow={colorMode === 'light' ? 'md' : 'dark-md'}
           />
-          {!isSigninRoute && isRegister && !isAuth && <UserRegistrationForm />}
+          {!isSigninRoute && isRegister && <UserRegistrationForm />}
           {isSigninRoute && !isAuth && (
             <>
               {isMagicAuth && <MagicAuthForm />}

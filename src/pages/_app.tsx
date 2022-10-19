@@ -19,6 +19,7 @@ const MyApp: AppType<{ session: SessionWithUser | null; cookies: string }> = ({
 }) => {
   const { asPath } = router as NextRouter;
   const { auth } = Component as NextComponentType & { auth?: boolean };
+  console.log('🚀 | file: _app.tsx | line 23 | asPath', asPath);
 
   return (
     <>
@@ -31,6 +32,7 @@ const MyApp: AppType<{ session: SessionWithUser | null; cookies: string }> = ({
       <ErrorBoundary>
         <SessionProvider session={session}>
           <ChakraWrapper cookies={cookies}>
+            <MessageRouter asPath={decodeURIComponent(asPath)} />
             {auth ? (
               <Auth>
                 <Component {...pageProps} />
@@ -38,7 +40,6 @@ const MyApp: AppType<{ session: SessionWithUser | null; cookies: string }> = ({
             ) : (
               <Component {...pageProps} />
             )}
-            <MessageRouter asPath={decodeURIComponent(asPath)} />
           </ChakraWrapper>
         </SessionProvider>
       </ErrorBoundary>

@@ -1,9 +1,9 @@
-import { User } from '@prisma/client';
 import { prisma } from '@/server/db/client';
 import { CreateUserInput, UserInput } from '@/types';
+import { User } from '@prisma/client';
 
 export const createUser = async (
-  input: CreateUserInput
+  input: Omit<CreateUserInput, 'passwordConfirm'>
 ): Promise<UserInput> => {
   return (await prisma.user.create({
     data: input,
