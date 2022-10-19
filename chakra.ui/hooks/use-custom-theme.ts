@@ -1,13 +1,15 @@
+import { cancelRetry, omit } from '@/utils';
 import { ChakraTheme } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { theme } from '../theme';
 import { trpc } from 'src/utils/trpc';
-import { omit } from '../../src/utils/lodash';
+import { theme } from '../theme';
 import { mergeTheme } from '../utils/mergeThemes';
 
 export function useCustomTheme(): Partial<ChakraTheme> {
   const [customTheme, setCustomTheme] = useState<Partial<ChakraTheme>>(theme);
-  const { data: user, isLoading } = trpc.preference.all.useQuery();
+  const { data: user, isLoading } = trpc.preference.all.useQuery(undefined, {
+    ...cancelRetry
+  });
 
   useEffect(() => {
     if (isLoading) return;

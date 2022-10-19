@@ -1,6 +1,6 @@
 import { magicAuthInputSchema } from '@/schema';
 import { MagicAuthInput } from '@/types';
-import { onPromise, trpc } from '@/utils';
+import { cancelRetry, onPromise, trpc } from '@/utils';
 import {
   FormControl,
   FormErrorMessage,
@@ -24,10 +24,7 @@ type MagicAuthInputWithToken = {
 
 export const MagicAuthForm: React.FC = () => {
   const { data } = trpc.auth.formUtils.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    retryOnMount: false,
-    retry: false,
+    ...cancelRetry,
   });
 
   const {

@@ -1,10 +1,10 @@
 // src/utils/trpc.ts
 import { httpBatchLink, loggerLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
-import type { AppRouter } from '../server/trpc/router/_app';
 import superjson from 'superjson';
+import type { AppRouter } from '../server/trpc/router/_app';
+import { debug, ONE_SECOND } from './constants';
 import { getBaseUrl } from './fns';
-import { ONE_SECOND } from './constants';
 
 export const trpc = createTRPCNext<AppRouter>({
   config({ ctx }) {
@@ -31,7 +31,7 @@ export const trpc = createTRPCNext<AppRouter>({
       links: [
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === 'development' ||
+            debug ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({

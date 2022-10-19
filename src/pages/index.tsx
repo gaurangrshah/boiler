@@ -1,4 +1,4 @@
-import { onPromise } from '@/utils';
+import { cancelRetry, dev, ONE_MIN, onPromise } from '@/utils';
 import { chakra } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
 import type { NextPage } from 'next';
@@ -30,8 +30,11 @@ const Home: NextPage = () => {
 export default Home;
 
 const AuthShowcase: React.FC = () => {
-  const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery();
-
+  const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery(
+    undefined,
+    { ...cancelRetry }
+  );
+  dev.log('file: index.tsx | line 34 | secretMessage', secretMessage, false);
   const { data: sessionData } = useSession();
 
   return (
