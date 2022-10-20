@@ -1,7 +1,7 @@
 import { Button, VStack } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
 
-export const OAuthButtons = (): JSX.Element | null => {
+export const OAuthButton = (): JSX.Element | null => {
   return (
     <VStack alignItems="flex-end" gap={4}>
       <Button

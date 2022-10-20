@@ -1,7 +1,7 @@
 import { prisma } from '@/server/db/client';
 import { dev, omit } from '@/utils';
 import { User } from '@prisma/client';
-import { comparePasswords } from '../argon2';
+import { comparePasswords } from '../../argon2';
 
 type AuthorizeFnCredentials = Record<'email' | 'password', string> | undefined;
 

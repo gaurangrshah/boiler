@@ -6,7 +6,7 @@ import { Button, HStack, Spinner, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn, SignInResponse } from 'next-auth/react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { UserAuthorizationConfig } from '../hook-form/field-configs';
+import { UserAuthorizationConfig } from '../../hook-form/field-configs';
 
 export const CredentialsFormNew: React.FC = () => {
   const { defaultValues, fields } = UserAuthorizationConfig;
@@ -29,6 +29,7 @@ export const CredentialsFormNew: React.FC = () => {
       <VStack
         as="form"
         alignItems="flex-end"
+        w="full"
         gap={4}
         // NOTE: onPromise helps satisfy the need for the handler to return a promise
         onSubmit={onPromise(methods.handleSubmit(onSubmit))}

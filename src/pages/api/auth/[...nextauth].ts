@@ -1,15 +1,17 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import EmailProvider from 'next-auth/providers/email';
-import SpotifyProvider from 'next-auth/providers/spotify';
-// Prisma adapter for NextAuth, optional and can be removed
 import { env } from '@/env/server.mjs';
-import { authorize } from '@/lib/next-auth/authorize';
-import { onCreateuser } from '@/lib/next-auth/onCreateUser';
+import {
+  events,
+  jwtCallback,
+  maxAge,
+  providers,
+  redirectCallback,
+  sessionCallback,
+  signInCallback,
+} from '@/lib/next-auth';
 import { prisma } from '@/server/db/client';
-import { PrismaUser } from '@/types/zod/prisma';
-import { debug as globalDebug, dev, omit, ONE_DAY, wait } from '@/utils';
+import { debug as globalDebug, dev } from '@/utils';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import NextAuth, { type NextAuthOptions } from 'next-auth';
 
 const debug: boolean = globalDebug || true;
 
@@ -19,178 +21,44 @@ export const authOptions: NextAuthOptions = {
     warn: (code) => dev.log('next-auth:warning: ', code),
     error: (code) => dev.error('next-auth:error: ', code),
     debug: (code, metadata) =>
-      dev.log('next-auth:debug: ', { code, metadata }, true),
+      dev.log('next-auth:debug: ', { code, metadata }, debug),
   },
   cookies: {
     //
   },
   jwt: {
-    maxAge: 30 * ONE_DAY,
+    maxAge,
     secret: env.NEXTAUTH_SECRET,
   },
   session: {
-    maxAge: 30 * ONE_DAY,
+    maxAge,
     strategy: 'database',
   },
   callbacks: {
-    redirect({ url, baseUrl }) {
-      dev.log('callback:redirect', { url, baseUrl }, debug);
-      return baseUrl;
-    },
-    signIn({ user, account, profile, email, credentials }) {
-      dev.log(
-        'callback:signin',
-        {
-          user,
-          account,
-          profile,
-          email,
-          credentials,
-        },
-        debug
-      );
-
-      if (!email?.verificationRequest) {
-        // @TODO: add logic to ensure a verification message is shown, and should ideally block login
-      } else if (!(user as PrismaUser)?.isActive) {
-        //
-      }
-      return true;
-    },
-    jwt({ token, user, account, profile, isNewUser }) {
-      dev.log(
-        'callback:jwt',
-        {
-          token,
-          user,
-          account,
-          profile,
-          isNewUser,
-        },
-        debug
-      );
-      const _user = omit(user as PrismaUser, 'password');
-      user && (token.user = _user);
-
-      if (isNewUser) {
-        token.isNewUser = true;
-      }
-      return token;
-    },
-    session({ session, user }) {
-      dev.log('callback:session', { session, user }, debug);
-      if (session.user) {
-        session.user.id = user.id;
-        session.user = omit(session.user, 'password') as PrismaUser;
-      }
-      dev.log('callback:session | session-omit-pw', session, debug);
-      return session;
-    },
+    redirect: redirectCallback,
+    signIn: signInCallback,
+    jwt: jwtCallback,
+    session: sessionCallback,
   },
 
   adapter: PrismaAdapter(prisma),
-  providers: [
-    SpotifyProvider({
-      clientId: env.SPOTIFY_CLIENT_ID,
-      clientSecret: env.SPOTIFY_CLIENT_SECRET,
-    }),
+  providers,
 
-    EmailProvider({
-      server: {
-        host: env.SMTP_HOST,
-        port: Number(env.SMTP_PORT),
-        auth: {
-          user: env.EMAIL_FROM,
-          pass: env.SMTP_PASS,
-        },
-      },
-      from: env.EMAIL_FROM,
-      maxAge: ONE_DAY, // email login links valid for 24 hrs.
-
-      /**
-       * @link: https://next-auth.js.org/providers/email
-       * tap into the builtin email verification request
-       */
-      // sendVerificationRequest({
-      //   identifier: email,
-      //   url,
-      //   provider: { server, from },
-      // }) {
-      //   /* your function */
-      // },
-    }),
-
-    CredentialsProvider({
-      type: 'credentials',
-      credentials: {
-        // @link: https://next-auth.js.org/configuration/providers/credentials#how-to
-        // The credentials is used to generate a suitable form on the sign in page.
-        // You can specify whatever fields you are expecting to be submitted.
-        email: {
-          label: 'Email',
-          type: 'text',
-          placeholder: 'you@youremail.com',
-        },
-        password: { label: 'Password', type: 'password' },
-      },
-
-      authorize: async (
-        credentials: Record<'email' | 'password', string> | undefined
-      ) => authorize(credentials),
-    }),
-
-    // ...add more providers here
-  ],
-
-  /**
-   * overwite default next-auth auth pages
-   * @link: https://next-auth.js.org/configuration/pages
-   * */
   pages: {
+    /**
+     * overwite default next-auth auth pages
+     * @link: https://next-auth.js.org/configuration/pages
+     *
+     * */
     signIn: '/auth/signin',
     //   signOut: '/auth/signout',
     //   error: '/auth/error', // Error code passed in query string as ?error=
-    verifyRequest: '/auth/verify-request', // (used for check email message)
-    newUser: '/auth/signin/register', // New users will be directed here on first sign in
+    // verifyRequest: '/auth/verify-request', // (used for check email message)
+    newUser: '/auth/register', // New users will be directed here on first sign in
     // NOTE: see here for error handling: https://next-auth.js.org/configuration/pages#error-codes
   },
 
-  // @link: https://next-auth.js.org/configuration/options#events
-  events: {
-    async signIn(message) {
-      await wait(50);
-      dev.log('event:signIn | message', message, debug);
-    },
-    async signOut(message) {
-      await wait(50);
-      dev.log('event:signOut | message', message, debug);
-    },
-    async createUser(message) {
-      dev.log('event:createUser | message', message, debug);
-      await onCreateuser({
-        id: message?.user?.id,
-        name: String(message?.user?.name),
-        email: String(message?.user?.email),
-      });
-    },
-    async updateUser(message) {
-      await wait(50);
-      dev.log('event:updateUser | message', message, debug);
-    },
-    async linkAccount(message) {
-      dev.log('event:linkAccount| message', message, debug);
-
-      if (!message.account && !message.user.name) {
-        await wait(50);
-        dev.error('event:linkAccount | no account or user.name found');
-      }
-    },
-    async session(message) {
-      dev.log('event:session | message', message, debug);
-      await wait(50);
-      dev.log('event:session - active');
-    },
-  },
+  events,
 };
 
 export default NextAuth(authOptions);

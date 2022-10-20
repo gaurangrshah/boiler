@@ -6,7 +6,7 @@ import { Button, Spinner, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { UserRegistrationConfig } from '../hook-form/field-configs';
+import { UserRegistrationConfig } from '../../hook-form/field-configs';
 
 export const UserRegistrationForm: React.FC = () => {
   const router = useRouter();
@@ -20,7 +20,7 @@ export const UserRegistrationForm: React.FC = () => {
   const { mutate, isLoading } = trpc.auth.registerUser.useMutation({
     onSuccess: () => {
       if (isBrowser) {
-        dev.log('auth.registerUser: success', debug)
+        dev.log('auth.registerUser: success', debug);
         void router.push('/auth/signin?success=User Created Successfully');
       }
     },
@@ -42,6 +42,7 @@ export const UserRegistrationForm: React.FC = () => {
         <VStack
           as="form"
           alignItems="flex-end"
+          w="full"
           gap={4}
           // NOTE: onPromise helps satisfy the need for the handler to return a promise
           onSubmit={onPromise(methods.handleSubmit(onSubmit))}

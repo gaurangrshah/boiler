@@ -1,3 +1,4 @@
+import { ONE_DAY } from "@/utils";
 /**
  * This is a hack from Github discussion.
  *
@@ -18,3 +19,5 @@ export function refreshSession() {
     JSON.stringify({ ...message, timestamp: Math.floor(Date.now() / 1000) })
   );
 }
+
+export const maxAge = 30 * ONE_DAY;
