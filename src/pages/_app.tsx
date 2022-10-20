@@ -1,5 +1,3 @@
-// src/pages/_app.tsx
-// import '../styles/globals.css';
 import { type SessionWithUser } from '@/lib/next-auth';
 import { dev, ErrorBoundary } from '@/utils';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
