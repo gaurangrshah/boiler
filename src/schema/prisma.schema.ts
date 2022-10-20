@@ -72,6 +72,7 @@ export const prismaUserSchema = z.object({
   emailVerified: z.optional(
     z.date(typeErrorMessage('emailVerified', 'date')).nullable()
   ),
+  isActive: z.boolean(errorMessages('isActive', 'boolean')),
   image: z.string(typeErrorMessage('image', 'string')).nullable(),
   session: z.optional(z.array(sessionSchema)),
   account: z.optional(z.array(accountSchema)),
