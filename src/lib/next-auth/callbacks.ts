@@ -1,7 +1,6 @@
 import { PrismaUser } from '@/types/zod/prisma';
 import { debug as globalDebug, dev, omit } from '@/utils';
-import NextAuth, { type CallbacksOptions } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import { type CallbacksOptions } from 'next-auth';
 
 const debug: boolean = globalDebug || false;
 // @TODO: add jwt handling from: https://tinyurl.com/2brculyw
@@ -30,7 +29,7 @@ export const jwtCallback: CallbacksOptions['jwt'] = ({
   dev.log('callback:jwt', { token, user, account, profile, isNewUser }, debug);
 
   const _user = omit(user as PrismaUser, 'password');
-  user && (token.user = _user);
+  user && (token.user = _user as PrismaUser);
 
   if (isNewUser) {
     token.isNewUser = true;
@@ -65,8 +64,8 @@ export const sessionCallback: CallbacksOptions['session'] = ({
 }) => {
   dev.log('callback:session', { session, user }, debug);
   if (session.user) {
-    session.user.id = user.id;
-    session.user = omit(session.user, 'password') as PrismaUser;
+    // session.user.id = (user as PrismaUser)?.id;
+    // session.user = omit(session.user, 'password') as PrismaUser;
   }
   dev.log('callback:session | session-omit-pw', session, debug);
   return session;

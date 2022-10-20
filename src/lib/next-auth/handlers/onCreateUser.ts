@@ -11,7 +11,7 @@ export const onCreateuser = async ({
   name,
   email,
 }: Pick<PrismaUser, 'id' | 'name' | 'email'>) => {
-  dev.log('onCreateUser.ts | line 13', { id, name, email });
+  dev.log('onCreateUser: creating user', { id, name, email });
   return await prisma.user.update({
     where: {
       id,
