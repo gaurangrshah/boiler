@@ -11,15 +11,22 @@ import { PrismaUser } from '@/types/zod/prisma';
 import { debug as globalDebug, dev, omit, ONE_DAY, wait } from '@/utils';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
-const debug: boolean = globalDebug || false;
+const debug: boolean = globalDebug || true;
 
 export const authOptions: NextAuthOptions = {
   debug,
+  logger: {
+    warn: (code) => dev.log('next-auth:warning: ', code),
+    error: (code) => dev.error('next-auth:error: ', code),
+    debug: (code, metadata) =>
+      dev.log('next-auth:debug: ', { code, metadata }, true),
+  },
   cookies: {
     //
   },
   jwt: {
     maxAge: 30 * ONE_DAY,
+    secret: env.NEXTAUTH_SECRET,
   },
   session: {
     maxAge: 30 * ONE_DAY,
@@ -42,6 +49,12 @@ export const authOptions: NextAuthOptions = {
         },
         debug
       );
+
+      if (!email?.verificationRequest) {
+        // @TODO: add logic to ensure a verification message is shown, and should ideally block login
+      } else if (!(user as PrismaUser)?.isActive) {
+        //
+      }
       return true;
     },
     jwt({ token, user, account, profile, isNewUser }) {
@@ -56,8 +69,11 @@ export const authOptions: NextAuthOptions = {
         },
         debug
       );
+      const _user = omit(user as PrismaUser, 'password');
+      user && (token.user = _user);
 
       if (isNewUser) {
+        token.isNewUser = true;
       }
       return token;
     },
