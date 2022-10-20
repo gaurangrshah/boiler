@@ -40,6 +40,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.37.0",
+    "spotify-web-api-node": "^5.0.2",
     "superjson": "1.9.1",
     "trpc-playground": "^0.4.3",
     "zod": "^3.18.0"
@@ -51,6 +52,7 @@
     "@types/nodemailer-smtp-transport": "^2.7.5",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
+    "@types/spotify-web-api-node": "^5.0.7",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "8.22.0",
