@@ -1,14 +1,25 @@
+import { Awaitable } from '@/types';
 import { PrismaUser } from '@/types/zod/prisma';
-import { debug as globalDebug, dev, omit } from '@/utils';
-import { type CallbacksOptions } from 'next-auth';
+import { debug as globalDebug, dev } from '@/utils';
+import { Account, Profile, User, type CallbacksOptions } from 'next-auth';
+import { AdapterUser } from 'next-auth/adapters';
+import { JWT } from 'next-auth/jwt';
+import { refreshAccessToken } from '../spotify-web-api/token';
 
-const debug: boolean = globalDebug || false;
-// @TODO: add jwt handling from: https://tinyurl.com/2brculyw
-// @TODO: integrate spotify web api
+const debug: boolean = globalDebug || true;
+
 /**
  * Next Auth Callbacks
  * Order of operation: [redirect => signIn => jwt => session]
  */
+
+type JWTCallback = (params: {
+  token: JWT;
+  user?: User | AdapterUser;
+  account?: Account | null;
+  profile?: Profile;
+  isNewUser?: boolean;
+}) => Awaitable<JWT>;
 
 export const redirectCallback: CallbacksOptions['redirect'] = ({
   url,
@@ -19,7 +30,7 @@ export const redirectCallback: CallbacksOptions['redirect'] = ({
   return baseUrl;
 };
 
-export const jwtCallback: CallbacksOptions['jwt'] = ({
+export const jwtCallback: JWTCallback = async ({
   token,
   account,
   user,
@@ -28,13 +39,25 @@ export const jwtCallback: CallbacksOptions['jwt'] = ({
 }) => {
   dev.log('callback:jwt', { token, user, account, profile, isNewUser }, debug);
 
-  const _user = omit(user as PrismaUser, 'password');
-  user && (token.user = _user as PrismaUser);
+  if (account && user) {
+    return {
+      ...token,
+      accessToken: account.access_token,
+      refreshToken: account.refresh_token,
+      username: account.providerAccountId,
 
-  if (isNewUser) {
-    token.isNewUser = true;
+      accessTokenExpires: (account.expires_at as number) * 1000, // converted to milliseconds
+    };
   }
-  return token;
+
+  //return previous token if the access token has not expired yet
+  if (Date.now() < (token?.accessTokenExpires as number)) {
+    return token;
+  }
+
+  //access token has expired, so we need to refresh it
+  dev.log('Token Expired. REFRESHING...');
+  return (await refreshAccessToken(token)) as JWT;
 };
 
 export const signInCallback: CallbacksOptions['signIn'] = ({
@@ -60,13 +83,17 @@ export const signInCallback: CallbacksOptions['signIn'] = ({
 
 export const sessionCallback: CallbacksOptions['session'] = ({
   session,
+  token,
   user,
 }) => {
-  dev.log('callback:session', { session, user }, debug);
-  if (session.user) {
-    // session.user.id = (user as PrismaUser)?.id;
-    // session.user = omit(session.user, 'password') as PrismaUser;
-  }
-  dev.log('callback:session | session-omit-pw', session, debug);
-  return session;
+  dev.log('callback:session', { session, user, token }, debug);
+  return {
+    ...session,
+    user: {
+      ...(session.user as User),
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+      username: token.username,
+    },
+  };
 };

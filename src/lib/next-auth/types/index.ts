@@ -16,20 +16,3 @@ export interface SessionWithUser extends Session {
   image: string;
   emailVerified?: string;
 }
-
-// Extend the build-in session types
-declare module 'next-auth' {
-  interface Session {
-    accessToken: string;
-  }
-}
-// Extend the build-in types for JWT
-declare module 'next-auth/jwt' {
-  interface JWT {
-    accessToken: string;
-    refreshToken: string;
-    accessTokenExpires: number;
-    user: User;
-    error?: 'RefreshAccessTokenDenied';
-  }
-}

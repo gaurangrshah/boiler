@@ -4,13 +4,28 @@ import { DefaultSession } from 'next-auth';
 
 // using "module augmentation"
 declare module 'next-auth' {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
+  // Extend the build-in session types
   interface Session {
-    // add id to the session interface
     user?: {
       id: string;
+      accessToken?: string;
+      refreshToken?: string;
     } & DefaultSession['user'];
+    error?: 'RefreshAccessTokenError';
+  }
+}
+// Extend the build-in types for JWT
+declare module 'next-auth/jwt' {
+  interface JWT {
+    // name?: string | null;
+    // email?: string | null;
+    // picture?: string | null;
+    // sub?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    accessTokenExpires?: number;
+    username?: string;
+    user?: User;
+    error?: 'RefreshAccessTokenDenied';
   }
 }

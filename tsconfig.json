@@ -19,6 +19,6 @@
     "paths": { "@/*": ["./src/*"] },
     "sourceMap": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "src/lib/spotify-web-api/index.ts"],
   "exclude": ["node_modules"]
 }

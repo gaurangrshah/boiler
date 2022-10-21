@@ -13,7 +13,7 @@ import { debug as globalDebug, dev } from '@/utils';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 
-const debug: boolean = globalDebug || true;
+const debug: boolean = globalDebug || false;
 
 export const authOptions: NextAuthOptions = {
   debug,
@@ -23,16 +23,10 @@ export const authOptions: NextAuthOptions = {
     debug: (code, metadata) =>
       dev.log('next-auth:debug: ', { code, metadata }, debug),
   },
-  cookies: {
-    //
-  },
-  jwt: {
-    maxAge,
-    secret: env.NEXTAUTH_SECRET,
-  },
+  // cookies: {},
   session: {
     maxAge,
-    strategy: 'database',
+    strategy: 'jwt',
   },
   callbacks: {
     redirect: redirectCallback,
@@ -43,7 +37,7 @@ export const authOptions: NextAuthOptions = {
 
   adapter: PrismaAdapter(prisma),
   providers,
-
+  secret: env.NEXTAUTH_SECRET,
   pages: {
     /**
      * overwite default next-auth auth pages
@@ -54,7 +48,7 @@ export const authOptions: NextAuthOptions = {
     //   signOut: '/auth/signout',
     //   error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)
-    newUser: '/auth/register', // New users will be directed here on first sign in
+    // newUser: '/auth/register', // New users will be directed here on first sign in
     // NOTE: see here for error handling: https://next-auth.js.org/configuration/pages#error-codes
   },
 
