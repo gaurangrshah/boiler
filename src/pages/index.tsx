@@ -1,8 +1,10 @@
+import { useSpotify } from '@/hooks';
 import { cancelRetry, dev, onPromise } from '@/utils';
 import { Button, chakra, HStack, VStack } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import { trpc } from '../utils/trpc';
 
 const Home: NextPage = () => {
@@ -38,12 +40,34 @@ const AuthShowcase: React.FC = () => {
       },
     }
   );
+
   const { data: sessionData } = useSession();
+  const { spotifyApi, spotifyUser } = useSpotify();
+  const { data: me } = trpc.spotify.me.useQuery();
+  const [fp, setFp] =
+    useState<SpotifyApi.ListOfFeaturedPlaylistsResponse | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { body: featuredPlaylist } =
+          await spotifyApi.getFeaturedPlaylists({
+            country: String(spotifyUser?.country),
+          });
+        setFp(featuredPlaylist);
+        console.log('featured', featuredPlaylist);
+      } catch (error) {
+        console.log('error at index.tsx', error);
+      }
+    };
+    void fetchData();
+  }, [spotifyApi, spotifyUser]);
 
   return (
     <VStack align="center" justify="center">
       {sessionData && <p>Logged in as {sessionData?.user?.name}</p>}
       {secretMessage && <p>{secretMessage}</p>}
+      {me && <p>{JSON.stringify(me, null, 2)}</p>}
       <Button
         onClick={onPromise(sessionData ? () => signOut() : () => signIn())}
       >

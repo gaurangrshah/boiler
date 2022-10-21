@@ -1,13 +1,15 @@
 import { comparePasswords, hashPassword } from '@/lib/argon2';
-import { type AppContextWithPrisma, type AuthenticateUserInput } from '@/types';
-import { dev, omit, debug as globalDebug } from '@/utils';
+import {
+  type AppContextWithSpotify,
+  type AuthenticateUserInput,
+} from '@/types';
+import { debug as globalDebug, dev, omit } from '@/utils';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as trpc from '@trpc/server';
 import { createUser, findUserWithPW, updateUser } from '../services';
 
-
-const debug:boolean = globalDebug || true;
+const debug: boolean = globalDebug || true;
 
 /**
  *
@@ -18,7 +20,7 @@ export const createOrUpdateUserHandler = async ({
   input,
 }: {
   input: Partial<User>;
-  ctx: AppContextWithPrisma;
+  ctx: AppContextWithSpotify;
 }) => {
   const { email, password: plainPassword } = input;
   let userExists: boolean; // if user exists update else create user
