@@ -9,7 +9,7 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import { getServerAuthSession } from '../common/get-server-auth-session';
 import { prisma } from '../db/client';
 
-type CreateContextOptions = {
+export type CreateContextOptions = {
   session: Session | null;
   prisma?: PrismaClient;
   spotifyApi?: typeof SpotifyWebApi;
@@ -33,6 +33,8 @@ export const createContextInner = async (opts: CreateContextOptions) => {
     spotifyApi,
   };
 };
+
+export type ContextInner = inferAsyncReturnType<typeof createContextInner>;
 
 /**
  * This is the actual context you'll use in your router

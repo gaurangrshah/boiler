@@ -1,25 +1,17 @@
 import spotifyApi from '@/lib/spotify-web-api';
+import { dev } from '@/utils';
+import { trpc } from '@/utils/trpc';
 import { signIn, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export function useSpotify() {
   const { data: session } = useSession();
-  const [spotifyUser, setspotifyUser] =
-    useState<SpotifyApi.CurrentUsersProfileResponse | null>(null);
+  const { data: user } = trpc.spotify.me.useQuery(undefined, {
+    enabled: !!session?.user?.accessToken,
+    onSuccess: (): void => dev.log('file: useSpotify | line 12 | user', user),
+  });
 
   useEffect(() => {
-    if (spotifyUser) return;
-    const fetchData = async () => {
-      try {
-        const { body: user } = await spotifyApi.getMe();
-        setspotifyUser(user);
-      } catch (error) {
-        console.log('🚀 | file: use-spotify.ts | line 16 | error', error);
-      }
-    };
-
-    void fetchData();
-
     if (session) {
       if (session.error === 'RefreshAccessTokenError') {
         void signIn();
@@ -27,7 +19,7 @@ export function useSpotify() {
 
       spotifyApi.setAccessToken(String(session?.user?.accessToken));
     }
-  }, [session, spotifyUser]);
+  }, [session]);
 
-  return { spotifyApi, spotifyUser };
+  return { spotifyApi, spotifyUser: user };
 }
