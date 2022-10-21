@@ -1,10 +1,9 @@
 import { useSpotify } from '@/hooks';
 import { cancelRetry, dev, onPromise } from '@/utils';
-import { Button, chakra, HStack, VStack } from '@chakra-ui/react';
+import { Button, chakra, Code, HStack, VStack } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
 import { trpc } from '../utils/trpc';
 
 const Home: NextPage = () => {
@@ -31,43 +30,31 @@ const Home: NextPage = () => {
 export default Home;
 
 const AuthShowcase: React.FC = () => {
-  const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery(
-    undefined,
+  const { data: sessionData } = useSession();
+  const { spotifyUser } = useSpotify();
+
+  const { data: featuredPlaylists } = trpc.spotify.featuredPlaylists.useQuery(
+    { country: String(spotifyUser?.country) },
     {
+      enabled: !!spotifyUser,
       ...cancelRetry,
-      onSuccess: (data): void => {
-        dev.log('file: index.tsx | line 38 | secretMessage', data);
-      },
+      onSuccess: (): void =>
+        dev.log(
+          'file: index.tsx | line 52 | featuredPlaylists',
+          featuredPlaylists
+        ),
     }
   );
 
-  const { data: sessionData } = useSession();
-  const { spotifyApi, spotifyUser } = useSpotify();
-  const { data: me } = trpc.spotify.me.useQuery();
-  const [fp, setFp] =
-    useState<SpotifyApi.ListOfFeaturedPlaylistsResponse | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { body: featuredPlaylist } =
-          await spotifyApi.getFeaturedPlaylists({
-            country: String(spotifyUser?.country),
-          });
-        setFp(featuredPlaylist);
-        console.log('featured', featuredPlaylist);
-      } catch (error) {
-        console.log('error at index.tsx', error);
-      }
-    };
-    void fetchData();
-  }, [spotifyApi, spotifyUser]);
-
   return (
     <VStack align="center" justify="center">
-      {sessionData && <p>Logged in as {sessionData?.user?.name}</p>}
-      {secretMessage && <p>{secretMessage}</p>}
-      {me && <p>{JSON.stringify(me, null, 2)}</p>}
+      {sessionData && (
+        <Code>Logged in as {JSON.stringify(sessionData, null, 2)}</Code>
+      )}
+      {spotifyUser && <code>{JSON.stringify(spotifyUser, null, 2)}</code>}
+      {featuredPlaylists && (
+        <code>{JSON.stringify(featuredPlaylists, null, 2)}</code>
+      )}
       <Button
         onClick={onPromise(sessionData ? () => signOut() : () => signIn())}
       >
