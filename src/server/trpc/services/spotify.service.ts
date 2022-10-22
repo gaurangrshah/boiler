@@ -1,17 +1,16 @@
 import { getNextCursor } from '@/lib/spotify-web-api';
-import { AppRouter } from '@/server';
 import { debug as globalDebug, dev } from '@/utils';
-import { inferProcedureOutput, TRPCError } from '@trpc/server';
+import { TRPCError } from '@trpc/server';
 import { ContextInner } from '../context';
 
 type GetMe = Promise<SpotifyApi.CurrentUsersProfileResponse | null>;
 type FeaturedPlaylists = Promise<
   SpotifyApi.ListOfFeaturedPlaylistsResponse['playlists'] | null
 >;
-
-// type InfinitePlaylistOutput = inferProcedureOutput<
-//   AppRouter['spotify']['infiniteUserPlaylists']
-// >;
+type GetUserPlaylistServiceOutput = {
+  data: SpotifyApi.PlaylistObjectSimplified[];
+  nextCursor: number | undefined;
+};
 
 const debug: boolean = globalDebug || true;
 
@@ -59,7 +58,7 @@ export async function getUserPlaylists({
   ctx: ContextInner;
   userId: string;
   cursor: number | undefined;
-}) {
+}): Promise<GetUserPlaylistServiceOutput> {
   const LIMIT = 20;
   const OFFSET = cursor ? cursor * LIMIT : 1;
   dev.log(
@@ -68,15 +67,15 @@ export async function getUserPlaylists({
     true
   );
   try {
-    const page = await ctx.spotifyApi.getUserPlaylists(userId, {
+    const response = await ctx.spotifyApi.getUserPlaylists(userId, {
       limit: LIMIT,
       offset: OFFSET,
     });
 
-    dev.log('getUserPlaylist.service:response', page, false);
-    const nextCursor = getNextCursor(LIMIT, cursor, page.body.total);
+    dev.log('getUserPlaylist.service:response', response, false);
+    const nextCursor = getNextCursor(LIMIT, cursor, response.body.total);
     return {
-      data: page.body.items,
+      data: response.body.items,
       nextCursor: nextCursor,
     };
   } catch (error) {
