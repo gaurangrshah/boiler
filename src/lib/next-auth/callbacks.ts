@@ -6,7 +6,7 @@ import { AdapterUser } from 'next-auth/adapters';
 import { JWT } from 'next-auth/jwt';
 import { refreshAccessToken } from '../spotify-web-api/token';
 
-const debug: boolean = globalDebug || true;
+const debug: boolean = globalDebug || false;
 
 /**
  * Next Auth Callbacks

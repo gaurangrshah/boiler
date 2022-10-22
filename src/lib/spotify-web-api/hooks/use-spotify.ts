@@ -8,7 +8,7 @@ export function useSpotify() {
   const { data: session } = useSession();
   const { data: user } = trpc.spotify.me.useQuery(undefined, {
     enabled: !!session?.user?.accessToken,
-    onSuccess: (): void => dev.log('file: useSpotify | line 12 | user', user),
+    onSuccess: (): void => dev.log('file: useSpotify | line 12 | spotifyuser', user),
   });
 
   useEffect(() => {

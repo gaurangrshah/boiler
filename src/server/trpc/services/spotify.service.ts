@@ -1,20 +1,26 @@
-import { TRPCError } from '@trpc/server';
+import { getNextCursor } from '@/lib/spotify-web-api';
+import { AppRouter } from '@/server';
+import { debug as globalDebug, dev } from '@/utils';
+import { inferProcedureOutput, TRPCError } from '@trpc/server';
 import { ContextInner } from '../context';
 
 type GetMe = Promise<SpotifyApi.CurrentUsersProfileResponse | null>;
 type FeaturedPlaylists = Promise<
   SpotifyApi.ListOfFeaturedPlaylistsResponse['playlists'] | null
 >;
-type UserPlaylists = {
-  body: Promise<SpotifyApi.ListOfUsersPlaylistsResponse | null>;
-  nextCursor: number;
-};
+
+// type InfinitePlaylistOutput = inferProcedureOutput<
+//   AppRouter['spotify']['infiniteUserPlaylists']
+// >;
+
+const debug: boolean = globalDebug || true;
 
 export async function getMe({ ctx }: { ctx: ContextInner }): GetMe {
   try {
     const { body: user } = await ctx.spotifyApi.getMe();
     return user;
   } catch (error) {
+    dev.error('🔴 spotify.getMe', error, debug);
     throw new TRPCError({
       code: 'NOT_FOUND',
       message: 'An unexpected error occurred, please try again later.',
@@ -36,6 +42,7 @@ export async function getFeaturedPlaylists({
     } = await ctx.spotifyApi.getFeaturedPlaylists({ country });
     return playlists;
   } catch (error) {
+    dev.error('🔴 spotify.getFeaturedPlaylists', error, debug);
     throw new TRPCError({
       code: 'NOT_FOUND',
       message: 'An unexpected error occurred, please try again later.',
@@ -47,30 +54,33 @@ export async function getFeaturedPlaylists({
 export async function getUserPlaylists({
   ctx,
   userId,
-  cursor,
+  cursor = 0,
 }: {
   ctx: ContextInner;
   userId: string;
-  cursor?: number;
+  cursor: number | undefined;
 }) {
   const LIMIT = 20;
-  const OFFSET = cursor || 0;
-
+  const OFFSET = cursor ? cursor * LIMIT : 1;
+  dev.log(
+    'getUserPlaylist.service:inputs',
+    { userId, cursor, LIMIT, OFFSET },
+    true
+  );
   try {
-    const { body } = await ctx.spotifyApi.getUserPlaylists(userId, {
+    const page = await ctx.spotifyApi.getUserPlaylists(userId, {
       limit: LIMIT,
       offset: OFFSET,
     });
 
-    let nextCursor: typeof cursor | undefined = undefined;
-    if ((cursor || 1) * LIMIT < body.total) {
-      nextCursor = (cursor || 1) * LIMIT;
-    }
+    dev.log('getUserPlaylist.service:response', page, false);
+    const nextCursor = getNextCursor(LIMIT, cursor, page.body.total);
     return {
-      body,
-      nextCursor: Number(nextCursor),
+      data: page.body.items,
+      nextCursor: nextCursor,
     };
   } catch (error) {
+    dev.error('🔴 spotify.getUserPlaylists', error, debug);
     throw new TRPCError({
       code: 'NOT_FOUND',
       message: 'An unexpected error occurred, please try again later.',

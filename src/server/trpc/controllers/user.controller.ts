@@ -9,7 +9,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as trpc from '@trpc/server';
 import { createUser, findUserWithPW, updateUser } from '../services';
 
-const debug: boolean = globalDebug || true;
+const debug: boolean = globalDebug || false;
 
 /**
  *

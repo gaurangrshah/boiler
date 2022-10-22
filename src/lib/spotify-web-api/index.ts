@@ -18,11 +18,7 @@ const scopes = [
   'playlist-modify-private',
 ].join(' ');
 
-const params = {
-  // response_type: 'code',
-  // client_id: client_id,
-  scope: scopes,
-};
+const params = { scope: scopes };
 
 const queryParamsString = new URLSearchParams(params);
 
@@ -35,4 +31,7 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 export default spotifyApi;
+export * from './hooks';
+export * from './time';
+export * from './utils';
 export { LOGIN_URL };
