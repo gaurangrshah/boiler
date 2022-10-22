@@ -1,4 +1,3 @@
-import { PlaylistsContainer } from '@/components/spotify/playlists-wrapper';
 import { useSpotify } from '@/lib/spotify-web-api';
 import { cancelRetry, dev, onPromise } from '@/utils';
 import { Button, chakra, Code, HStack, VStack } from '@chakra-ui/react';
@@ -35,10 +34,8 @@ const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
   const { spotifyUser } = useSpotify();
 
-
   return (
     <VStack align="center" justify="center">
-      <PlaylistsContainer />
       <Button
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >

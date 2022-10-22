@@ -4,8 +4,8 @@ import { protectedProcedure, router } from '../trpc';
 
 export const spotifyRouter = router({
   me: protectedProcedure.query(
-    async ({ ctx }): Promise<SpotifyApi.CurrentUsersProfileResponse | null> =>
-      await getMe({ ctx })
+    ({ ctx }): Promise<SpotifyApi.CurrentUsersProfileResponse | null> =>
+      getMe({ ctx })
   ),
   featuredPlaylists: protectedProcedure
     .input(z.object({ country: z.string() }))
@@ -26,4 +26,15 @@ export const spotifyRouter = router({
         cursor: input.cursor,
       })
     ),
+  myTopTracks: protectedProcedure
+    .query(async ({ ctx }): Promise<SpotifyApi.TrackObjectFull[]> => {
+      const { body } = await ctx.spotifyApi.getMyTopTracks();
+      return body.items;
+    }),
+  myTopArtists: protectedProcedure.query(
+    async ({ ctx }): Promise<SpotifyApi.ArtistObjectFull[]> => {
+      const { body } = await ctx.spotifyApi.getMyTopArtists();
+      return body.items;
+    }
+  ),
 });

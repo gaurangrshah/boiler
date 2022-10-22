@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Playlist } from '@/components/spotify';
 import { useInfinitePlaylists, useSpotify } from '@/lib/spotify-web-api';
 
-export const PlaylistsContainer: React.FC = () => {
+export const PlaylistsWrapper: React.FC = ():JSX.Element => {
   const { ref, inView } = useInView({ threshold: 0.9 });
   const { spotifyUser } = useSpotify();
 
