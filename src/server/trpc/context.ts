@@ -1,10 +1,11 @@
 // src/server/router/context.ts
 import spotifyApi from '@/lib/spotify-web-api';
+import { JWTWithTokens, refreshAccessToken } from '@/lib/spotify-web-api/token';
 import { PrismaClient } from '@prisma/client';
 import type { inferAsyncReturnType } from '@trpc/server';
 import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
 import type { Session } from 'next-auth';
-import { signIn } from 'next-auth/react';
+import { JWT } from 'next-auth/jwt';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { getServerAuthSession } from '../common/get-server-auth-session';
 import { prisma } from '../db/client';
@@ -23,7 +24,12 @@ export type CreateContextOptions = {
 export const createContextInner = async (opts: CreateContextOptions) => {
   if (opts.session) {
     if (opts.session.error === 'RefreshAccessTokenError') {
-      void signIn();
+      const userWithTokens: JWTWithTokens | JWT | undefined =
+        opts?.session?.user;
+      if (userWithTokens) {
+        // @TODO: token should refresh, but it is not
+        void refreshAccessToken(userWithTokens);
+      }
     }
     spotifyApi.setAccessToken(String(opts?.session.user?.accessToken));
   }
