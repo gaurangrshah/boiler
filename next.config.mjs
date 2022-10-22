@@ -27,6 +27,9 @@ export default defineNextConfig({
       'mosaic.scdn.co',
       'seed-mix-image.spotifycdn.com',
       'charts-images.scdn.co',
+      'api.spotify.com',
+      'dailymix-images.scdn.co',
+      'newjams-images.scdn.co',
     ],
   },
 });
