@@ -18,7 +18,13 @@ export default function Me(): JSX.Element {
           fontSize="4xl"
           fontWeight={800}
         >{`${displayName}'s Spotify Details`}</chakra.h1>
-        <HStack w="full" gap={6}>
+        <HStack
+          position="relative"
+          w="full"
+          mb={6}
+          alignItems="flex-start"
+          gap={6}
+        >
           <UserTopTracks />
           <UserTopArtists />
         </HStack>

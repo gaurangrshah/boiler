@@ -32,6 +32,5 @@ const spotifyApi = new SpotifyWebApi({
 
 export default spotifyApi;
 export * from './hooks';
-export * from './time';
 export * from './utils';
 export { LOGIN_URL };
