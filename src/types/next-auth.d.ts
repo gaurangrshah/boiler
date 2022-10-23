@@ -11,7 +11,7 @@ declare module 'next-auth' {
       accessToken?: string;
       refreshToken?: string;
     } & DefaultSession['user'];
-    error?: 'RefreshAccessTokenError';
+    error?: string; //'RefreshAccessTokenError' | 'RefreshAccessTokenDenied';
   }
 }
 // Extend the build-in types for JWT
@@ -26,6 +26,6 @@ declare module 'next-auth/jwt' {
     accessTokenExpires?: number;
     username?: string;
     user?: User;
-    error?: 'RefreshAccessTokenDenied';
+    error?: string; // 'RefreshAccessTokenDenied';
   }
 }

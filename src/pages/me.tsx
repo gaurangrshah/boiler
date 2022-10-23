@@ -4,8 +4,7 @@ import {
   UserTopTracks,
 } from '@/components/spotify';
 import { useSpotify } from '@/lib/spotify-web-api';
-import { trpc } from '@/utils/trpc';
-import { Box, chakra, HStack, VStack } from '@chakra-ui/react';
+import { Box, chakra, HStack } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
 
 export default function Me(): JSX.Element {
@@ -13,7 +12,7 @@ export default function Me(): JSX.Element {
   const displayName = spotifyUser?.display_name as string;
   return (
     <PageLayout title={displayName} type="default">
-      <Box w="full">
+      <Box w="full" mb={12}>
         <chakra.h1
           textAlign="center"
           fontSize="4xl"

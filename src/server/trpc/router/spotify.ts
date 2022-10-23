@@ -1,8 +1,12 @@
+import { refreshAccessToken } from '@/lib/spotify-web-api/token';
 import { z } from 'zod';
 import { getFeaturedPlaylists, getMe, getUserPlaylists } from '../services';
 import { protectedProcedure, router } from '../trpc';
 
 export const spotifyRouter = router({
+  // refreshToken: protectedProcedure.mutation(
+  //   async ({ ctx }) => await refreshAccessToken(ctx.session.user)
+  // ),
   me: protectedProcedure.query(
     ({ ctx }): Promise<SpotifyApi.CurrentUsersProfileResponse | null> =>
       getMe({ ctx })
@@ -26,11 +30,12 @@ export const spotifyRouter = router({
         cursor: input.cursor,
       })
     ),
-  myTopTracks: protectedProcedure
-    .query(async ({ ctx }): Promise<SpotifyApi.TrackObjectFull[]> => {
+  myTopTracks: protectedProcedure.query(
+    async ({ ctx }): Promise<SpotifyApi.TrackObjectFull[]> => {
       const { body } = await ctx.spotifyApi.getMyTopTracks();
       return body.items;
-    }),
+    }
+  ),
   myTopArtists: protectedProcedure.query(
     async ({ ctx }): Promise<SpotifyApi.ArtistObjectFull[]> => {
       const { body } = await ctx.spotifyApi.getMyTopArtists();

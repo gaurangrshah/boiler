@@ -25,7 +25,7 @@ export const redirectCallback: CallbacksOptions['redirect'] = ({
   url,
   baseUrl,
 }) => {
-  dev.log('callback:redirect', { url, baseUrl }, debug);
+  dev.log('🔁 callback:redirect', { url, baseUrl }, debug);
 
   return baseUrl;
 };
@@ -37,7 +37,11 @@ export const jwtCallback: JWTCallback = async ({
   profile,
   isNewUser,
 }) => {
-  dev.log('callback:jwt', { token, user, account, profile, isNewUser }, debug);
+  dev.log(
+    '🔒 callback:jwt',
+    { token, user, account, profile, isNewUser },
+    debug
+  );
 
   if (account && user) {
     return {
@@ -56,8 +60,10 @@ export const jwtCallback: JWTCallback = async ({
   }
 
   //access token has expired, so we need to refresh it
-  dev.log('Token Expired. REFRESHING...');
-  return (await refreshAccessToken(token)) as JWT;
+  dev.log('🎟 Token Expired. REFRESHING...', null, true);
+  const jwt: JWT = await refreshAccessToken(token);
+  dev.log('🔵 | file: callbacks.ts | line 65 | jwt', jwt);
+  return jwt;
 };
 
 export const signInCallback: CallbacksOptions['signIn'] = ({
@@ -68,7 +74,7 @@ export const signInCallback: CallbacksOptions['signIn'] = ({
   credentials,
 }) => {
   dev.log(
-    'callback:signin',
+    '🔓 callback:signin',
     { user, account, profile, email, credentials },
     debug
   );
@@ -86,7 +92,7 @@ export const sessionCallback: CallbacksOptions['session'] = ({
   token,
   user,
 }) => {
-  dev.log('callback:session', { session, user, token }, debug);
+  dev.log('🎫 callback:session', { session, user, token }, debug);
   return {
     ...session,
     user: {
