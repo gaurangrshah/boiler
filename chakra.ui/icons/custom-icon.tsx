@@ -5,18 +5,21 @@ type CustomIconProps = {
   icon: string;
   size: string;
   color: string;
+  stroke?: string;
 };
 
 export const CustomIcon: React.FC<CustomIconProps> = ({
   icon = 'add',
   size = '1.25rem',
   color = 'inherit',
+  stroke,
   ...rest
 }) => {
   const Icon: React.FC<CustomIconProps & ChakraProps> = ({
     color,
     size,
     icon,
+    stroke,
     ...rest
   }) => {
     return (
@@ -26,6 +29,7 @@ export const CustomIcon: React.FC<CustomIconProps> = ({
         width={size}
         height={size}
         fill={color}
+        stroke={stroke}
         {...rest}
       >
         {paths[icon]?.d.map((d: string, i: number) => (
