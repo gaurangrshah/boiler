@@ -62,10 +62,10 @@ export const Track: React.FC<TrackType> = ({ ...track }): JSX.Element => {
               </chakra.p>
             </HStack>
             <HStack>
-              <chakra.p>d:{track.audioFeatures?.danceability}</chakra.p>
-              <chakra.p>e: {track.audioFeatures?.energy}</chakra.p>
+              <chakra.p>🪩:{track.audioFeatures?.danceability}</chakra.p>
+              <chakra.p>⚡️: {track.audioFeatures?.energy}</chakra.p>
               <chakra.p>t:{track.audioFeatures?.tempo}</chakra.p>
-              <chakra.p>k: {track.audioFeatures?.key}</chakra.p>
+              <chakra.p>🎹: {track.audioFeatures?.key}</chakra.p>
             </HStack>
           </VStack>
           <ArtistAvatarGroup artists={track.artists} />
