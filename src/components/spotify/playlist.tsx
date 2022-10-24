@@ -19,9 +19,9 @@ export const Playlist = ({
     <Container
       w="full"
       py={4}
-      maxW="container.md"
+      maxW="container.lg"
       border="1px solid"
-      borderColor="brand.800"
+      borderColor="brand.200"
       borderRadius="md"
     >
       <Link href={playlist?.external_urls?.spotify} isExternal>

@@ -9,7 +9,7 @@ export const Widget = ({ title, children }: DefaultProps) => {
   return (
     <Box
       p={4}
-      w="50%"
+      w="100%"
       border="1px solid"
       borderColor="gray.200"
       borderRadius="lg"

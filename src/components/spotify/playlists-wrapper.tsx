@@ -3,9 +3,11 @@ import { useInView } from 'react-intersection-observer';
 
 import { Playlist } from '@/components/spotify';
 import { useInfinitePlaylists, useSpotify } from '@/lib/spotify-web-api';
+import { Box, VStack } from '@chakra-ui/react';
+import { Widget } from './widget';
 
-export const PlaylistsWrapper: React.FC = ():JSX.Element => {
-  const { ref, inView } = useInView({ threshold: 0.9 });
+export const PlaylistsWrapper: React.FC = (): JSX.Element => {
+  const { ref, inView } = useInView({ threshold: 0.7 });
   const { spotifyUser } = useSpotify();
 
   const { playlists, fetchNextPage } = useInfinitePlaylists(
@@ -19,13 +21,15 @@ export const PlaylistsWrapper: React.FC = ():JSX.Element => {
   }, [fetchNextPage, inView]);
 
   return (
-    <>
-      {playlists?.pages.map((page) =>
-        page.data.map((playlist) => (
-          <Playlist key={playlist.id} playlist={playlist} />
-        ))
-      )}
-      <span ref={ref}></span>
-    </>
+    <Widget title="Your Playlists">
+      <VStack w="full" align="flex-start" maxH={'675px'} overflowY="auto">
+        {playlists?.pages.map((page) =>
+          page.data.map((playlist) => (
+            <Playlist key={playlist.id} playlist={playlist} />
+          ))
+        )}
+        <Box minH={8} ref={ref}></Box>
+      </VStack>
+    </Widget>
   );
 };
