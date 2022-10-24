@@ -1,5 +1,6 @@
 import { convertToShortString } from '@/utils';
 import { Avatar, Badge, Box, chakra, HStack } from '@chakra-ui/react';
+import { useColor } from 'chakra.ui';
 
 type BadgeColorSchemes =
   | 'whiteAlpha'
@@ -53,6 +54,8 @@ const mapGenres = (genre: string, i: number) => {
 export const Artist: React.FC<SpotifyApi.ArtistObjectFull> = ({
   ...artist
 }): JSX.Element => {
+  const { mode: textMode } = useColor('text-stat');
+  const { mode: bgMode } = useColor('bg-panel');
   artist.genres.length = 3;
   return (
     <HStack
@@ -62,6 +65,8 @@ export const Artist: React.FC<SpotifyApi.ArtistObjectFull> = ({
       border="1px solid"
       borderRadius="md"
       borderColor="gray.200"
+      bg={bgMode}
+      color={textMode}
     >
       <Avatar name={artist.name} src={String(artist?.images[0]?.url)} />
       <Box>

@@ -42,4 +42,22 @@ export const spotifyRouter = router({
       return body.items;
     }
   ),
+  getArtistsByIds: protectedProcedure
+    .input(z.object({ artistIds: z.array(z.string()) }))
+    .query(async ({ ctx, input }): Promise<SpotifyApi.ArtistObjectFull[]> => {
+      const { body } = await ctx.spotifyApi.getArtists(input.artistIds);
+
+      return body.artists;
+    }),
+  getAudioFeaturesForTracks: protectedProcedure
+    .input(z.object({ trackIds: z.array(z.string()) }))
+    .query(
+      async ({ ctx, input }): Promise<SpotifyApi.AudioFeaturesObject[]> => {
+        const { body } = await ctx.spotifyApi.getAudioFeaturesForTracks(
+          input.trackIds
+        );
+
+        return body.audio_features;
+      }
+    ),
 });
