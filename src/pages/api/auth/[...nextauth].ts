@@ -4,8 +4,7 @@ import EmailProvider from 'next-auth/providers/email';
 import SpotifyProvider from 'next-auth/providers/spotify';
 // Prisma adapter for NextAuth, optional and can be removed
 import { env } from '@/env/server.mjs';
-import { authorize } from '@/lib/next-auth/authorize';
-import { onCreateuser } from '@/lib/next-auth/onCreateUser';
+import { authorize, onCreateuser } from '@/lib/next-auth';
 import { prisma } from '@/server/db/client';
 import { PrismaUser } from '@/types/zod/prisma';
 import { debug as globalDebug, dev, omit, ONE_DAY, wait } from '@/utils';
