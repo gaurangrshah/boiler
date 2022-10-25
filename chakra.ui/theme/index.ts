@@ -6,8 +6,8 @@ import {
   withDefaultColorScheme,
   withDefaultProps,
 } from '@chakra-ui/react';
+import { StyleConfig } from '@chakra-ui/theme-tools';
 import { styles } from './global';
-
 const debug = globalDebug || false;
 
 const colors: ChakraTheme['colors'] = {
@@ -108,7 +108,8 @@ const foundations: Pick<
   zIndices: {},
 };
 
-const components: ChakraTheme['components'] = {
+// const components: ChakraTheme['components'] = {
+const components: Record<string, StyleConfig> = {
   Button: {
     baseStyle: {
       fontFamily: 'body',
@@ -120,6 +121,64 @@ const components: ChakraTheme['components'] = {
         color: 'gray.500',
       }),
     },
+  },
+  Widget: {
+    baseStyle: ({ colorMode }) => ({
+      color: colorMode === 'dark' ? 'gray.400' : 'gray.700',
+      bg: 'transparent',
+      w: 'full',
+      p: 4,
+      borderRadius: 'lg',
+      border: '1px solid',
+      borderColor: colorMode === 'dark' ? 'gray.700' : 'gray.200',
+      sx: {
+        '& div > h2': {
+          color: 'red',
+          mt: 24,
+        },
+      },
+    }),
+  },
+};
+
+const layerStyles: ChakraTheme['layerStyles'] = {};
+
+const textStyles: ChakraTheme['textStyles'] = {
+  h1: {
+    fontSize: '4xl',
+    fontFamily: 'heading',
+    fontWeight: 800,
+  },
+  h2: {
+    fontSize: '2xl',
+    fontFamily: 'heading',
+    fontWeight: 800,
+  },
+  h3: {
+    fontSize: '1xl',
+    fontFamily: 'heading',
+    fontWeight: 800,
+  },
+  h4: {
+    fontSize: 'xl',
+    fontFamily: 'heading',
+    fontWeight: 800,
+  },
+  body: {
+    fontSize: 'initial',
+    fontFamily: 'body',
+  },
+  description: {
+    fontSize: 'lg',
+    fontFamily: 'body',
+  },
+  stat: {
+    fontSize: 'sm',
+    fontFamily: 'body',
+  },
+  tiny: {
+    fontSize: 'xs',
+    fontFamily: 'body',
   },
 };
 
@@ -134,6 +193,7 @@ export const theme: Partial<ChakraTheme> = extendTheme(
     config,
     styles,
     components,
+    textStyles,
     semanticTokens,
     ...foundations,
     ...typography,

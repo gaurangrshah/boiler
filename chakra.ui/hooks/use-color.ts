@@ -11,7 +11,7 @@ export function useColor(type: string) {
 
   const colorModes: ColorModes = {
     'text-stat': isLight ? 'brand.700' : 'brand.300',
-    'bg-panel': isLight ? 'green.50' : 'brand.800',
+    'bg-panel': isLight ? 'green.50' : '#041b15',
   };
 
   return {
