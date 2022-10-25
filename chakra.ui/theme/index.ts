@@ -36,6 +36,10 @@ const semanticTokens: ChakraTheme['semanticTokens'] = {
       default: 'purple.400',
       _dark: 'purple.200',
     },
+    heading: {
+      default: 'brand.300',
+      _dark: 'brand.500',
+    },
   },
 };
 
