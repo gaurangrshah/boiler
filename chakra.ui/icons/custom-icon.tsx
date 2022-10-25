@@ -4,14 +4,14 @@ import { paths } from './paths';
 type CustomIconProps = {
   icon: string;
   size: string;
-  color: string;
+  color?: string;
   stroke?: string;
 };
 
 export const CustomIcon: React.FC<CustomIconProps> = ({
   icon = 'add',
   size = '1.25rem',
-  color = 'inherit',
+  color,
   stroke,
   ...rest
 }) => {
@@ -39,5 +39,7 @@ export const CustomIcon: React.FC<CustomIconProps> = ({
     );
   };
 
-  return <Icon color={color} size={size} icon={icon} {...rest} />;
+  return (
+    <Icon color={color} size={size} icon={icon} stroke={stroke} {...rest} />
+  );
 };
