@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Playlist } from '@/components/spotify';
 import { useInfinitePlaylists, useSpotify } from '@/lib/spotify-web-api';
 import { Box, VStack } from '@chakra-ui/react';
+import { PanelLoader } from 'chakra.ui';
 import { Widget } from './widget';
 
 export const PlaylistsWrapper: React.FC = (): JSX.Element => {
@@ -23,6 +24,7 @@ export const PlaylistsWrapper: React.FC = (): JSX.Element => {
   return (
     <Widget title="Your Playlists">
       <VStack w="full" align="flex-start" maxH={'675px'} overflowY="auto">
+        {!playlists?.pages.length && <PanelLoader />}
         {playlists?.pages.map((page) =>
           page.data.map((playlist) => (
             <Playlist key={playlist.id} playlist={playlist} />

@@ -1,6 +1,7 @@
 import { cancelRetry } from '@/utils/';
 import { trpc } from '@/utils/trpc';
 import { VStack } from '@chakra-ui/react';
+import { PanelLoader } from 'chakra.ui';
 import { Track } from './track';
 import { Widget } from './widget';
 
@@ -60,7 +61,7 @@ export const UserTopTracks: React.FC = (): JSX.Element => {
 
   const trackIds = topTracks?.map((track) => track.id).flat();
 
-  const { data: audioFeatures } =
+  const { data: audioFeatures, isLoading } =
     trpc.spotify.getAudioFeaturesForTracks.useQuery(
       { trackIds: trackIds?.length ? trackIds : [] },
       { enabled: !!trackIds?.length, ...cancelRetry }
@@ -84,11 +85,14 @@ export const UserTopTracks: React.FC = (): JSX.Element => {
     ),
   ];
 
-  console.log('tracks', tracks);
   return (
     <Widget title="Your Top Tracks">
       <VStack layerStyle="widget-col">
-        {tracks?.length && tracks.map(mapTracks)}
+        {isLoading && !tracks.length ? (
+          <PanelLoader />
+        ) : (
+          tracks?.length && tracks.map(mapTracks)
+        )}
       </VStack>
     </Widget>
   );

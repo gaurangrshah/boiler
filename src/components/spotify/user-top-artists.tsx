@@ -1,6 +1,7 @@
 import { cancelRetry } from '@/utils/';
 import { trpc } from '@/utils/trpc';
 import { VStack } from '@chakra-ui/react';
+import { PanelLoader } from 'chakra.ui';
 import { Artist } from './artist';
 import { Widget } from './widget';
 
@@ -9,13 +10,20 @@ const mapArtists = (artist: SpotifyApi.ArtistObjectFull) => (
 );
 
 export const UserTopArtists: React.FC = (): JSX.Element => {
-  const { data: topArtists } = trpc.spotify.myTopArtists.useQuery(undefined, {
-    ...cancelRetry,
-  });
+  const { data: topArtists, isLoading } = trpc.spotify.myTopArtists.useQuery(
+    undefined,
+    {
+      ...cancelRetry,
+    }
+  );
   return (
     <Widget title="Your Top Artists">
       <VStack layerStyle="widget-col">
-        {topArtists?.length && topArtists?.map(mapArtists)}
+        {isLoading ? (
+          <PanelLoader />
+        ) : (
+          topArtists?.length && topArtists?.map(mapArtists)
+        )}
       </VStack>
     </Widget>
   );
