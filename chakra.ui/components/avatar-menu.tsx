@@ -14,7 +14,7 @@ import Link from 'next/link';
 
 const defaultLinks = [
   { label: 'home', href: '/' },
-  { label: 'profile', href: '/me'},
+  { label: 'profile', href: '/me' },
 ];
 
 const ChNextLink = chakra(Link);
@@ -37,7 +37,6 @@ export function AvatarMenu() {
         {status !== 'loading' ? (
           <MenuButton
             as={Avatar}
-            variant="unstyled"
             name={session?.user?.email ?? ''}
             src={session?.user?.image ?? ''}
             _hover={{ cursor: 'pointer', border: 'lg' }}

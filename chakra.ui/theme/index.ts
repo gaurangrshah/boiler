@@ -141,6 +141,7 @@ const components: Record<string, StyleConfig> = {
       color: 'text',
       bg: 'transparent',
       w: 'full',
+      minH: '200px',
       p: 4,
       borderRadius: 'lg',
       border: '1px solid',
