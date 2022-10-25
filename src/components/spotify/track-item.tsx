@@ -10,9 +10,9 @@ import {
 import { CustomIcon } from 'chakra.ui';
 import Image from 'next/image';
 import { truncate } from '../../utils/fns';
-import { type Track as TrackType } from './user-top-tracks';
+import { type TrackType } from './user-top-tracks';
 
-export const Track: React.FC<TrackType> = ({ ...track }): JSX.Element => {
+export const TrackItem: React.FC<TrackType> = ({ ...track }): JSX.Element => {
   return (
     <HStack
       h={48}

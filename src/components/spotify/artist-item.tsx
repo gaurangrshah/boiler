@@ -50,7 +50,7 @@ const mapGenres = (genre: string, i: number) => {
   );
 };
 
-export const Artist: React.FC<SpotifyApi.ArtistObjectFull> = ({
+export const ArtistItem: React.FC<SpotifyApi.ArtistObjectFull> = ({
   ...artist
 }): JSX.Element => {
   artist.genres.length = 3;

@@ -2,11 +2,11 @@ import { cancelRetry } from '@/utils/';
 import { trpc } from '@/utils/trpc';
 import { VStack } from '@chakra-ui/react';
 import { PanelLoader } from 'chakra.ui';
-import { Artist } from './artist';
+import { ArtistItem } from './artist-item';
 import { Widget } from './widget';
 
 const mapArtists = (artist: SpotifyApi.ArtistObjectFull) => (
-  <Artist key={artist.name} {...artist} />
+  <ArtistItem key={artist.name} {...artist} />
 );
 
 export const UserTopArtists: React.FC = (): JSX.Element => {

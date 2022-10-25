@@ -2,7 +2,7 @@ import { cancelRetry } from '@/utils/';
 import { trpc } from '@/utils/trpc';
 import { VStack } from '@chakra-ui/react';
 import { PanelLoader } from 'chakra.ui';
-import { Track } from './track';
+import { TrackItem } from './track-item';
 import { Widget } from './widget';
 
 export type Artist = {
@@ -15,7 +15,7 @@ export type Artist = {
   uri: SpotifyApi.ArtistObjectSimplified['uri'];
 };
 
-export type Track = {
+export type TrackType = {
   album: SpotifyApi.AlbumObjectSimplified;
   artists: Artist[];
   available_markets?: SpotifyApi.TrackObjectFull['available_markets'];
@@ -36,8 +36,8 @@ export type Track = {
   audioFeatures?: SpotifyApi.AudioFeaturesObject;
 };
 
-const mapTracks = (track: Track): JSX.Element => (
-  <Track key={track.name} {...track} />
+const mapTracks = (track: TrackType): JSX.Element => (
+  <TrackItem key={track.name} {...track} />
 );
 
 export const UserTopTracks: React.FC = (): JSX.Element => {
@@ -69,7 +69,7 @@ export const UserTopTracks: React.FC = (): JSX.Element => {
     );
 
   // package tracks with audioFeatures and artists
-  const tracks = topTracks?.map((track): Track => {
+  const tracks = topTracks?.map((track): TrackType => {
     track.artists = track.artists.map((tArtist) => ({
       ...tArtist,
       details: artists?.filter((artist) => artist.id === tArtist.id)[0],
