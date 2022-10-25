@@ -1,25 +1,25 @@
-import { Box, chakra } from '@chakra-ui/react';
+import {
+  chakra,
+  forwardRef,
+  HTMLChakraProps,
+  ThemingProps,
+  useStyleConfig,
+} from '@chakra-ui/react';
 
-type DefaultProps = {
-  title: string;
-  children: React.ReactNode;
-};
+export interface CustomWidgetProps
+  extends HTMLChakraProps<'div'>,
+    ThemingProps {}
 
-export const Widget = ({ title, children }: DefaultProps) => {
+export const Widget = forwardRef<CustomWidgetProps, 'div'>((props, ref) => {
+  const { children, title } = props;
+  const styles = useStyleConfig('Widget', {});
+
   return (
-    <Box
-      p={4}
-      w="100%"
-      border="1px solid"
-      borderColor="gray.200"
-      borderRadius="lg"
-    >
-      <Box as="header">
-        <chakra.h2 w="full" fontSize="2xl" fontWeight={800} m={0} p={0}>
-          {title}
-        </chakra.h2>
-      </Box>
+    <chakra.div ref={ref} __css={styles} {...props}>
+      <chakra.div>
+        <chakra.h2 w="full">{title}</chakra.h2>
+      </chakra.div>
       {children}
-    </Box>
+    </chakra.div>
   );
-};
+});

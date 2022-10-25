@@ -66,7 +66,7 @@ export const Artist: React.FC<SpotifyApi.ArtistObjectFull> = ({
       borderRadius="md"
       borderColor="gray.200"
       bg={bgMode}
-      color={textMode}
+      // color={textMode}
     >
       <Avatar name={artist.name} src={String(artist?.images[0]?.url)} />
       <Box>

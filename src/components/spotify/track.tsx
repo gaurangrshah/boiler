@@ -28,7 +28,7 @@ export const Track: React.FC<TrackType> = ({ ...track }): JSX.Element => {
       borderRadius="md"
       border="1px solid"
       borderColor="gray.100"
-      color={textMode}
+      // color={textMode}
     >
       <Box borderRadius="md" boxShadow="md">
         <Image
@@ -48,7 +48,8 @@ export const Track: React.FC<TrackType> = ({ ...track }): JSX.Element => {
               <CustomIcon
                 icon="record"
                 size="1em"
-                color={String(textMode)}
+                // color={String(textMode)}
+                color="inherit"
                 stroke="3px"
               />
               <chakra.p fontSize="sm" fontWeight={600}>
@@ -56,7 +57,12 @@ export const Track: React.FC<TrackType> = ({ ...track }): JSX.Element => {
               </chakra.p>
             </HStack>
             <HStack>
-              <CustomIcon icon="clock" size="1em" color={String(textMode)} />
+              <CustomIcon
+                icon="clock"
+                size="1em"
+                color="inherit"
+                // color={String(textMode)}
+              />
               <chakra.p>
                 {millisToMinutesAndSeconds(track.duration_ms)}
               </chakra.p>
