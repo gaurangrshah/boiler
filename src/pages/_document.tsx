@@ -5,7 +5,12 @@ class Doc extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <script
+            src="https://polyfill.io/v3/polyfill.min.js?features=WeakRef,BigInt"
+            async
+          />
+        </Head>
         <body>
           <ColorModeScript initialColorMode={config?.initialColorMode} />
           <Main />
