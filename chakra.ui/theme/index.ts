@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { StyleConfig } from '@chakra-ui/theme-tools';
 import { styles } from './global';
+
 const debug = globalDebug || false;
 
 const colors: ChakraTheme['colors'] = {
@@ -24,20 +25,6 @@ const colors: ChakraTheme['colors'] = {
     900: '#050a14', // bg-dark
   },
 };
-// @link: https://chakra-ui.com/docs/styled-system/semantic-tokens
-const semanticTokens: ChakraTheme['semanticTokens'] = {
-  colors: {
-    error: 'red.400',
-    text: {
-      default: 'brand.900',
-      _dark: 'brand.40',
-    },
-    link: {
-      default: 'purple.400',
-      _dark: 'purple.200',
-    },
-  },
-};
 
 const fonts: ChakraTheme['fonts'] = {
   heading: `Josefin Sans, ${base.fonts.heading}`,
@@ -47,7 +34,7 @@ const fonts: ChakraTheme['fonts'] = {
   default: `-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;`,
 };
-// 'fontSizes' | 'fontWeights' | 'letterSpacings' | 'lightHeights'
+
 const typography: Pick<
   ChakraTheme,
   'fonts' | 'fontSizes' | 'fontWeights' | 'letterSpacings' | 'lineHeights'
@@ -108,7 +95,33 @@ const foundations: Pick<
   zIndices: {},
 };
 
-// const components: ChakraTheme['components'] = {
+// @link: https://chakra-ui.com/docs/styled-system/semantic-tokens
+const semanticTokens: ChakraTheme['semanticTokens'] = {
+  colors: {
+    error: 'red.400',
+    text: {
+      default: 'brand.900',
+      _dark: 'brand.40',
+    },
+    link: {
+      default: 'purple.300',
+      _dark: 'purple.600',
+    },
+    'bg-panel': {
+      default: 'green.50',
+      _dark: '#041b15',
+    },
+    'panel-border': {
+      default: 'green.200',
+      _dark: 'gray.700',
+    },
+    heading: {
+      default: 'brand.300',
+      _dark: 'brand.500',
+    },
+  },
+};
+
 const components: Record<string, StyleConfig> = {
   Button: {
     baseStyle: {
@@ -123,46 +136,71 @@ const components: Record<string, StyleConfig> = {
     },
   },
   Widget: {
-    baseStyle: ({ colorMode }) => ({
-      color: colorMode === 'dark' ? 'gray.400' : 'gray.700',
+    // baseStyle: ({ colorMode }) => ({}),
+    baseStyle: {
+      color: 'text',
       bg: 'transparent',
       w: 'full',
       p: 4,
       borderRadius: 'lg',
       border: '1px solid',
-      borderColor: colorMode === 'dark' ? 'gray.700' : 'gray.200',
-      sx: {
-        '& div > h2': {
-          color: 'red',
-          mt: 24,
-        },
-      },
-    }),
+      borderColor: 'panel-border',
+    },
+  },
+  Bar: {
+    baseStyle: {
+      posiition: 'relative',
+      w: 'full',
+      p: 8,
+      maxH: 20,
+      zInded: 'tooltip',
+      bg: 'gray.900', // @FIXME: add mode support
+    },
   },
 };
 
-const layerStyles: ChakraTheme['layerStyles'] = {};
+const layerStyles: ChakraTheme['layerStyles'] = {
+  'widget-col': {
+    w: 'full',
+    alignItems: 'flex-start',
+    maxH: '675px',
+    overflowY: 'auto',
+  },
+  'widget-panel': {
+    position: 'relative',
+    w: 'full',
+    border: '1px solid',
+    borderColor: 'panel-border',
+    borderRadius: 'md',
+    p: 6,
+  },
+  'flex-center': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+};
 
 const textStyles: ChakraTheme['textStyles'] = {
   h1: {
-    fontSize: '4xl',
+    fontSize: '5xl',
     fontFamily: 'heading',
-    fontWeight: 800,
+    fontWeight: 900,
   },
   h2: {
-    fontSize: '2xl',
+    fontSize: '3xl',
     fontFamily: 'heading',
     fontWeight: 800,
   },
   h3: {
-    fontSize: '1xl',
+    fontSize: '2xl',
     fontFamily: 'heading',
-    fontWeight: 800,
+    fontWeight: 700,
   },
   h4: {
     fontSize: 'xl',
     fontFamily: 'heading',
-    fontWeight: 800,
+    fontWeight: 600,
   },
   body: {
     fontSize: 'initial',
@@ -180,6 +218,11 @@ const textStyles: ChakraTheme['textStyles'] = {
     fontSize: 'xs',
     fontFamily: 'body',
   },
+  title: {
+    fontSize: 'xl',
+    fontWeight: 700,
+    lineHeight: 1.2,
+  },
 };
 
 export const config: ChakraTheme['config'] = {
@@ -194,6 +237,7 @@ export const theme: Partial<ChakraTheme> = extendTheme(
     styles,
     components,
     textStyles,
+    layerStyles,
     semanticTokens,
     ...foundations,
     ...typography,

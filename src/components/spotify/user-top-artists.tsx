@@ -14,7 +14,7 @@ export const UserTopArtists: React.FC = (): JSX.Element => {
   });
   return (
     <Widget title="Your Top Artists">
-      <VStack w="full" alignItems="flex-start" maxH={'675px'} overflowY="auto">
+      <VStack layerStyle="widget-col">
         {topArtists?.length && topArtists?.map(mapArtists)}
       </VStack>
     </Widget>

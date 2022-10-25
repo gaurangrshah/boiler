@@ -87,7 +87,7 @@ export const UserTopTracks: React.FC = (): JSX.Element => {
   console.log('tracks', tracks);
   return (
     <Widget title="Your Top Tracks">
-      <VStack w="full" align="flex-start" maxH={'675px'} overflowY="auto">
+      <VStack layerStyle="widget-col">
         {tracks?.length && tracks.map(mapTracks)}
       </VStack>
     </Widget>

@@ -7,28 +7,20 @@ import {
   HStack,
   VStack,
 } from '@chakra-ui/react';
-import { CustomIcon, useColor } from 'chakra.ui';
+import { CustomIcon } from 'chakra.ui';
 import Image from 'next/image';
 import { truncate } from '../../utils/fns';
 import { type Track as TrackType } from './user-top-tracks';
 
 export const Track: React.FC<TrackType> = ({ ...track }): JSX.Element => {
-  const { mode: textMode } = useColor('text-stat');
-  const { mode: bgMode } = useColor('bg-panel');
-
   return (
     <HStack
-      position="relative"
-      w="full"
       h={48}
       p={6}
       gap={6}
-      bg={bgMode}
       justify="flex-start"
-      borderRadius="md"
-      border="1px solid"
-      borderColor="gray.100"
-      // color={textMode}
+      bg="bg-panel"
+      layerStyle="widget-panel"
     >
       <Box borderRadius="md" boxShadow="md">
         <Image
@@ -39,44 +31,39 @@ export const Track: React.FC<TrackType> = ({ ...track }): JSX.Element => {
         />
       </Box>
       <VStack w="full" align="flex-start">
-        <chakra.h2 fontSize="xl" fontWeight={700} lineHeight="1.2">
-          {track.name}
-        </chakra.h2>
+        <chakra.h2 textStyle="title">{track.name}</chakra.h2>
         <HStack w="full" justify="space-between">
           <VStack w="full" align="flex-start">
-            <HStack align="center" justify="center">
-              <CustomIcon
-                icon="record"
-                size="1em"
-                // color={String(textMode)}
-                color="inherit"
-                stroke="3px"
-              />
-              <chakra.p fontSize="sm" fontWeight={600}>
+            <HStack layerStyle="flex-center" color="text">
+              <CustomIcon icon="record" size="1.35em" color="gray.300" />
+              <chakra.p textStyle="stat">
                 {truncate(track.album.name, 22)}
               </chakra.p>
             </HStack>
             <HStack>
-              <CustomIcon
-                icon="clock"
-                size="1em"
-                color="inherit"
-                // color={String(textMode)}
-              />
-              <chakra.p>
+              <CustomIcon icon="clock" size="1.35em" color="gray.300" />
+              <chakra.p textStyle="stat">
                 {millisToMinutesAndSeconds(track.duration_ms)}
               </chakra.p>
             </HStack>
-            <HStack>
-              <chakra.p>🪩:{track.audioFeatures?.danceability}</chakra.p>
-              <chakra.p>⚡️: {track.audioFeatures?.energy}</chakra.p>
-              <chakra.p>t:{track.audioFeatures?.tempo}</chakra.p>
-              <chakra.p>🎹: {track.audioFeatures?.key}</chakra.p>
-            </HStack>
+            <TrackStats {...track} />
           </VStack>
           <ArtistAvatarGroup artists={track.artists} />
         </HStack>
       </VStack>
+    </HStack>
+  );
+};
+
+export const TrackStats: React.FC<TrackType> = ({
+  audioFeatures,
+}): JSX.Element => {
+  return (
+    <HStack>
+      <chakra.p textStyle="stat">🪩: {audioFeatures?.danceability}</chakra.p>
+      <chakra.p textStyle="stat">⚡️: {audioFeatures?.energy}</chakra.p>
+      <chakra.p textStyle="stat">t: {audioFeatures?.tempo}</chakra.p>
+      <chakra.p textStyle="stat">🎹: {audioFeatures?.key}</chakra.p>
     </HStack>
   );
 };

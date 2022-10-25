@@ -21,7 +21,9 @@ export const Playlist = ({
       py={4}
       maxW="container.lg"
       border="1px solid"
-      borderColor="brand.200"
+      bg="bg-panel"
+      // borderColor="brand.200"
+      borderColor="panel-border"
       borderRadius="md"
     >
       <Link href={playlist?.external_urls?.spotify} isExternal>
@@ -43,7 +45,7 @@ export const Playlist = ({
                 position="absolute"
                 top={4}
                 right={4}
-                bg="blue.400"
+                bg="bg-panel"
                 borderRadius="full"
                 width={16}
                 height={16}
@@ -51,12 +53,7 @@ export const Playlist = ({
                 align="center"
                 justify="center"
               >
-                <chakra.h4
-                  mt={2}
-                  fontSize="xl"
-                  fontWeight={600}
-                  lineHeight="1rem"
-                >
+                <chakra.h4 mt={2} lineHeight={0.5}>
                   {playlist.tracks.total}
                 </chakra.h4>
                 <chakra.p>tracks</chakra.p>
@@ -64,16 +61,16 @@ export const Playlist = ({
             ) : null}
           </Box>
           <Flex direction="column" pl={4} gap={4} w="full">
-            <chakra.h2 fontSize="xl" fontWeight={600}>
-              {playlist.name}
-            </chakra.h2>
+            <chakra.h2>{playlist.name}</chakra.h2>
             <chakra.p>{playlist.description}</chakra.p>
             <HStack mt={9} justify="flex-end">
               {!!playlist?.owner?.display_name &&
                 playlist?.owner?.display_name !== 'undefined' && (
                   <HStack p={2} border="ActiveBorder">
-                    <Avatar name={playlist?.owner?.display_name} />
-                    <chakra.p>{playlist?.owner?.display_name}</chakra.p>
+                    <Avatar size="md" name={playlist?.owner?.display_name} />
+                    <chakra.p textStyle="title">
+                      {playlist?.owner?.display_name}
+                    </chakra.p>
                   </HStack>
                 )}
             </HStack>

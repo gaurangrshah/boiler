@@ -13,11 +13,7 @@ export default function Me(): JSX.Element {
   return (
     <PageLayout title={displayName} type="default">
       <Box w="full" mb={12}>
-        <chakra.h1
-          textAlign="center"
-          fontSize="4xl"
-          fontWeight={800}
-        >{`${displayName}'s Spotify Details`}</chakra.h1>
+        <chakra.h1 textAlign="center">{`${displayName}'s Spotify Details`}</chakra.h1>
         <HStack
           position="relative"
           w="full"
