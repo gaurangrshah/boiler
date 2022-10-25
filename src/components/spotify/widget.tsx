@@ -11,14 +11,14 @@ export interface CustomWidgetProps
     ThemingProps {}
 
 export const Widget = forwardRef<CustomWidgetProps, 'div'>((props, ref) => {
-  const { children, title } = props;
+  const { children, title, ...rest } = props;
   const styles = useStyleConfig('Widget', {});
 
   return (
-    <chakra.div ref={ref} __css={styles} {...props}>
-      <chakra.div>
+    <chakra.div ref={ref} __css={styles} {...rest}>
+      <chakra.header>
         <chakra.h2 w="full">{title}</chakra.h2>
-      </chakra.div>
+      </chakra.header>
       {children}
     </chakra.div>
   );

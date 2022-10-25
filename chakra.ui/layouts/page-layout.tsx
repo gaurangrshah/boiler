@@ -14,8 +14,8 @@ import { AvatarMenu, Bar, ModeToggle } from '../components';
 import { Sidebar } from '.';
 
 type LayoutProps = {
-  type: string;
   title: string;
+  type?: string;
   subtitle?: string;
   description?: string;
   children: React.ReactNode;
