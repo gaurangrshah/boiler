@@ -1,4 +1,6 @@
-import { dev } from '@/utils/logger';
+import { debug as globalDebug, dev } from '@/utils';
+
+const debug = globalDebug || false;
 
 export function getNextCursor(
   limit: number,
@@ -14,6 +16,6 @@ export function getNextCursor(
   if (cursor * limit > total) {
     nextCursor = undefined;
   }
-  dev.log('fn:getNextCursor', nextCursor);
+  dev.log('fn:getNextCursor', nextCursor, debug);
   return nextCursor;
 }

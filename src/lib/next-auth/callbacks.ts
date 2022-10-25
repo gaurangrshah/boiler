@@ -60,7 +60,7 @@ export const jwtCallback: JWTCallback = async ({
   }
 
   //access token has expired, so we need to refresh it
-  dev.log('🎟 Token Expired. REFRESHING...', null, true);
+  dev.log('🎟 Token Expired. REFRESHING...', null, debug);
   const jwt: JWT = await refreshAccessToken(token);
   dev.log('🔵 | file: callbacks.ts | line 65 | jwt', jwt);
   return jwt;
