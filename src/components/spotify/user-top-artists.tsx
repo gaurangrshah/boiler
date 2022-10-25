@@ -16,10 +16,11 @@ export const UserTopArtists: React.FC = (): JSX.Element => {
       ...cancelRetry,
     }
   );
+
   return (
     <Widget title="Your Top Artists">
       <VStack layerStyle="widget-col">
-        {isLoading ? (
+        {isLoading && !topArtists ? (
           <PanelLoader />
         ) : (
           topArtists?.length && topArtists?.map(mapArtists)

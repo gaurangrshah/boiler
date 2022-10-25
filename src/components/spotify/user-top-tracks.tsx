@@ -41,58 +41,52 @@ const mapTracks = (track: Track): JSX.Element => (
 );
 
 export const UserTopTracks: React.FC = (): JSX.Element => {
-  const { data: topTracks } = trpc.spotify.myTopTracks.useQuery(undefined, {
-    ...cancelRetry,
-  });
+  // fetch user's tracks
+  const { data: topTracks, isLoading } = trpc.spotify.myTopTracks.useQuery(
+    undefined,
+    {
+      ...cancelRetry,
+    }
+  );
 
   const artistIds = topTracks
     ?.map((track) => track.artists.map((artist) => artist?.id))
     .flat();
 
+  // fetch artists details for user's tracks
   const { data: artists } = trpc.spotify.getArtistsByIds.useQuery(
-    {
-      artistIds: artistIds?.length ? artistIds : [],
-    },
-    {
-      enabled: !!artistIds?.length,
-      ...cancelRetry,
-    }
+    { artistIds: artistIds?.length ? artistIds : [] },
+    { enabled: !!artistIds?.length, ...cancelRetry }
   );
 
   const trackIds = topTracks?.map((track) => track.id).flat();
 
-  const { data: audioFeatures, isLoading } =
+  // fetch audioFeatures for user's tracks
+  const { data: audioFeatures } =
     trpc.spotify.getAudioFeaturesForTracks.useQuery(
       { trackIds: trackIds?.length ? trackIds : [] },
       { enabled: !!trackIds?.length, ...cancelRetry }
     );
 
-  const tracks = [
-    ...new Set(
-      topTracks?.map((track): Track => {
-        track.artists = track.artists.map((tArtist) => ({
-          ...tArtist,
-          details: artists?.filter((artist) => artist.id === tArtist.id)[0],
-        }));
+  // package tracks with audioFeatures and artists
+  const tracks = topTracks?.map((track): Track => {
+    track.artists = track.artists.map((tArtist) => ({
+      ...tArtist,
+      details: artists?.filter((artist) => artist.id === tArtist.id)[0],
+    }));
 
-        return {
-          ...track,
-          audioFeatures: audioFeatures?.filter(
-            (feature) => feature.track_href === track.href
-          )[0],
-        };
-      })
-    ),
-  ];
+    return {
+      ...track,
+      audioFeatures: audioFeatures?.filter(
+        (feature) => feature.track_href === track.href
+      )[0],
+    };
+  });
 
   return (
     <Widget title="Your Top Tracks">
       <VStack layerStyle="widget-col">
-        {isLoading && !tracks.length ? (
-          <PanelLoader />
-        ) : (
-          tracks?.length && tracks.map(mapTracks)
-        )}
+        {isLoading ? <PanelLoader /> : tracks?.length && tracks.map(mapTracks)}
       </VStack>
     </Widget>
   );

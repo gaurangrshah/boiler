@@ -11,7 +11,7 @@ export const PlaylistsWrapper: React.FC = (): JSX.Element => {
   const { ref, inView } = useInView({ threshold: 0.7 });
   const { spotifyUser } = useSpotify();
 
-  const { playlists, fetchNextPage } = useInfinitePlaylists(
+  const { playlists, fetchNextPage, hasNextPage } = useInfinitePlaylists(
     String(spotifyUser?.id)
   );
 
@@ -24,11 +24,14 @@ export const PlaylistsWrapper: React.FC = (): JSX.Element => {
   return (
     <Widget title="Your Playlists">
       <VStack w="full" align="flex-start" maxH={'675px'} overflowY="auto">
-        {!playlists?.pages.length && <PanelLoader />}
-        {playlists?.pages.map((page) =>
-          page.data.map((playlist) => (
-            <Playlist key={playlist.id} playlist={playlist} />
-          ))
+        {!playlists?.pages.length && hasNextPage ? (
+          <PanelLoader />
+        ) : (
+          playlists?.pages.map((page) =>
+            page.data.map((playlist) => (
+              <Playlist key={playlist.id} playlist={playlist} />
+            ))
+          )
         )}
         <Box minH={8} ref={ref}></Box>
       </VStack>
