@@ -16,7 +16,7 @@ export const RegisterLink: React.FC<RegisterProps> = ({
           Already registered? Sign in Now!
         </ChNextLink>
       ) : (
-        <ChNextLink href="/auth/signin/register">
+        <ChNextLink href="/auth/register">
           Not signed up yet? Register Now!
         </ChNextLink>
       )}

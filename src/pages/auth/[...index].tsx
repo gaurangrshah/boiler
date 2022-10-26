@@ -38,27 +38,33 @@ const AuthPage: React.FC = (): JSX.Element => {
   // routing booleans
   const isRegister = signInView === 'register';
   const isMagicAuth = signInView === 'magic';
-  // const isCredentialAuth = signInView === 'credentials';
   const isOAuth = signInView === 'oauth';
   const isSigninRoute = asPath.includes('signin');
   const isVerify = signInView === 'verify-request';
+  // const isCredentialAuth = signInView === 'credentials';
 
   useEffect(() => {
-    let view: string | undefined;
-
-    if (!!asPath.split('/')[3]) {
-      view = asPath.split('/')[3];
-    }
-    if (!view) {
-      view = asPath.includes('register')
-        ? 'register'
-        : asPath.includes('verify-request')
-        ? 'verify-request'
-        : undefined;
-    }
-    if (view) {
-      setSignInView(view as SignView);
-      dev.log('test', view, true);
+    switch (asPath) {
+      case '/auth/signin':
+        setSignInView('magic');
+        break;
+      case '/auth/signin':
+        setSignInView('magic');
+        break;
+      case '/auth/signin/oauth':
+        setSignInView('oauth');
+        break;
+      case '/auth/register':
+        setSignInView('register');
+        break;
+      case 'auth/verify-request':
+        setSignInView('verify-request');
+        break;
+      case '/auth':
+        setSignInView('magic');
+        break;
+      default:
+        break;
     }
   }, [asPath]);
 
@@ -83,7 +89,7 @@ const AuthPage: React.FC = (): JSX.Element => {
         >
           {isVerify && <VerifyRequest />}
           {isRegister && <UserRegistrationForm />}
-          {isSigninRoute && !isAuth && !isRegister && !isVerify && (
+          {isSigninRoute && !isRegister && !isVerify && (
             <>
               <HStack as="ul" justify="space-between" w="full" pt={12} pb={4}>
                 <AuthTabLink
@@ -110,9 +116,9 @@ const AuthPage: React.FC = (): JSX.Element => {
               {isMagicAuth && <MagicAuthForm />}
               {isOAuth && <OAuthButtons />}
               {/* {isCredentialAuth && <CredentialsFormNew />} */}
-              <RegisterLink isRegistered={isRegister} />
             </>
           )}
+          <RegisterLink isRegistered={isRegister} />
         </VStack>
       </Container>
     </PageLayout>
