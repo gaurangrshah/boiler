@@ -1,26 +1,26 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import {
+  Flex,
+  forwardRef,
+  HTMLChakraProps,
+  ThemingProps,
+  useStyleConfig,
+} from '@chakra-ui/react';
 
-type ReactDefaultProps = {
-  children: React.ReactNode;
-};
+export interface CustomBarProps extends HTMLChakraProps<'div'>, ThemingProps {}
 
-export const Bar: React.FC<ReactDefaultProps & FlexProps> = ({
-  children,
-  ...rest
-}) => {
+export const Bar = forwardRef<CustomBarProps, 'div'>((props, ref) => {
+  const { children, ...rest } = props;
+  const styles = useStyleConfig('Bar', {});
+
   return (
     <Flex
-      pos="relative"
-      w="full"
-      p={8}
-      maxH="20"
-      zIndex="tooltip"
-      justify="space-between"
-      align="center"
-      bg="gray.900"
+      ref={ref}
+      __css={styles}
+      justifyContent="space-between"
+      alignItems="center"
       {...rest}
     >
       {children}
     </Flex>
   );
-};
+});

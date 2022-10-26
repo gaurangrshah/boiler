@@ -125,6 +125,16 @@ const components: ChakraTheme['components'] = {
       }),
     },
   },
+  Bar: {
+    baseStyle: {
+      posiition: 'relative',
+      w: 'full',
+      p: 8,
+      maxH: 20,
+      zInded: 'tooltip',
+      bg: 'gray.900', // @FIXME: add mode support
+    },
+  },
 };
 
 export const config: ChakraTheme['config'] = {
