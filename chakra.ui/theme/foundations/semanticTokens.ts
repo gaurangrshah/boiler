@@ -13,7 +13,7 @@ export const semanticTokens: ChakraTheme['semanticTokens'] = {
     },
     'bg-panel': {
       default: 'green.50',
-      _dark: '#041b15',
+      _dark: '#020f0b',
     },
     'panel-border': {
       default: 'green.200',

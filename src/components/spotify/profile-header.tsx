@@ -17,7 +17,7 @@ export const ProfileHeader: React.FC<{
   return (
     <VStack
       w="full"
-      h="30vh"
+      h="65vh"
       layerStyle="flex-center"
       bgGradient="linear(to-b, bg-panel, transparent)"
     >
