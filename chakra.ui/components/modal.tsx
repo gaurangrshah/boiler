@@ -42,7 +42,6 @@ export const CHModal: React.FC<ModalProps & BoxProps & CustomModalProps> = ({
   // bg = 'brand.200',
   ...rest
 }) => {
-  // const { color } = useColor();
 
   // const handleHandler = (event: React.MouseEventHandler<HTMLButtonElement>) => {
   //   handler.action(event);
