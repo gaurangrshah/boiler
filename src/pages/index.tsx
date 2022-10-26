@@ -1,5 +1,5 @@
 import { cancelRetry, dev, onPromise } from '@/utils';
-import { Box, Button, chakra } from '@chakra-ui/react';
+import { Button, chakra, HStack, VStack } from '@chakra-ui/react';
 import { PageLayout } from 'chakra.ui';
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -13,14 +13,14 @@ const Home: NextPage = () => {
         title="My Landing Page"
         description="This is the landing page for my product, brand or service."
       >
-        <Box>
-          <Box>
-            <chakra.h1>
+        <HStack align="center" justify="center" w="full" minH="100vh">
+          <VStack w="full" minH="100vh" align="center" justify="center">
+            <chakra.h1 m={0} fontSize="7xl" fontWeight="bold" lineHeight="1.5">
               Create <chakra.span color="brand.400">T3</chakra.span> App
             </chakra.h1>
             <AuthShowcase />
-          </Box>
-        </Box>
+          </VStack>
+        </HStack>
       </PageLayout>
     </>
   );
@@ -41,7 +41,7 @@ const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <Box>
+    <VStack layerStyle="flex-center">
       {sessionData && <p>Logged in as {sessionData?.user?.name}</p>}
       {secretMessage && <p>{secretMessage}</p>}
       <Button
@@ -49,6 +49,6 @@ const AuthShowcase: React.FC = () => {
       >
         {sessionData ? 'Sign out' : 'Sign in'}
       </Button>
-    </Box>
+    </VStack>
   );
 };
