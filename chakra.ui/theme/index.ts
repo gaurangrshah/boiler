@@ -180,6 +180,13 @@ const layerStyles: ChakraTheme['layerStyles'] = {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  'flex-widget-panels': {
+    position: 'relative',
+    w: 'full',
+    mb: 6,
+    alignItems: 'flex-start',
+    gap: 6,
+  },
 };
 
 const textStyles: ChakraTheme['textStyles'] = {
